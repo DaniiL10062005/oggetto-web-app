@@ -11,7 +11,7 @@ export function TotalScore() {
       <Coins className='size-8 text-yellow-600 dark:text-yellow-400' />
       <div className='text-right'>
         <p className='text-xs font-semibold uppercase tracking-wider text-yellow-700 dark:text-yellow-300'>
-          Oggettons
+          Оджеттоны
         </p>
         <p className='text-2xl font-black text-yellow-900 dark:text-yellow-100'>{points}</p>
       </div>

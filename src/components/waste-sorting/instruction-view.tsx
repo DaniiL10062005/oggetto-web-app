@@ -1,8 +1,18 @@
 'use client'
 
-import { ArrowLeft, Trash2 } from 'lucide-react'
+import { ArrowLeft, Edit3, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+
+import { WasteSelector } from '@/components/waste-sorting/waste-selector'
 import { Button } from '@/shared/components/button'
-import type { WasteItem } from '@/shared/config/waste-data'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/components/dialog'
+import type { WasteItem } from '@/shared/mock/waste-data'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 import { cn } from '@/shared/utils/class-names'
 
@@ -10,7 +20,7 @@ interface InstructionViewProps {
   item: WasteItem
 }
 
-const binColorConfig = {
+const BIN_COLOR_CONFIG = {
   yellow: {
     bg: 'bg-yellow-100 dark:bg-yellow-950/30',
     border: 'border-yellow-500',
@@ -39,64 +49,88 @@ const binColorConfig = {
 
 export function InstructionView({ item }: InstructionViewProps) {
   const { completeDisposal, reset } = useKioskStore()
-  const colorConfig = binColorConfig[item.binColor]
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const colorConfig = BIN_COLOR_CONFIG[item.binColor]
 
   return (
-    <div className='space-y-8'>
-      {/* Bin Color Indicator */}
+    <div className='flex h-full w-full max-w-6xl flex-col justify-center gap-6'>
       <div
         className={cn(
-          'rounded-3xl border-8 p-12 text-center',
+          'rounded-3xl border-8 p-10 text-center',
           colorConfig.bg,
           colorConfig.border,
         )}
       >
-        {/* Bin Label Header */}
-        <div className={cn('mb-8', colorConfig.text)}>
-          <p className='text-2xl font-semibold uppercase tracking-wider'>
-            {item.binLabel} Bin
+        <div className={cn('mb-6', colorConfig.text)}>
+          <p className='text-xl font-semibold tracking-wider uppercase'>
+            Контейнер: {item.binLabel}
           </p>
-          <h1 className='mt-2 text-7xl font-black uppercase tracking-tight'>
-            {item.binColor} BIN
+          <h1 className='mt-2 text-6xl font-black tracking-tight uppercase'>
+            {item.binColor === 'yellow'
+              ? 'ЖЕЛТЫЙ'
+              : item.binColor === 'blue'
+                ? 'СИНИЙ'
+                : item.binColor === 'green'
+                  ? 'ЗЕЛЕНЫЙ'
+                  : 'СЕРЫЙ'}{' '}
+            КОНТЕЙНЕР
           </h1>
         </div>
 
-        {/* Item Name */}
-        <div className='mb-8'>
-          <p className='text-3xl font-bold text-gray-900 dark:text-gray-50'>
-            {item.label}
-          </p>
+        <div className='mb-6'>
+          <p className='text-3xl font-bold text-gray-900 dark:text-gray-50'>{item.label}</p>
         </div>
 
-        {/* Instruction */}
-        <div className='mx-auto max-w-2xl rounded-2xl bg-white/80 p-8 shadow-lg dark:bg-gray-900/80'>
-          <Trash2 className='mx-auto mb-4 size-16 text-gray-700 dark:text-gray-300' />
-          <p className='text-2xl font-semibold leading-relaxed text-gray-800 dark:text-gray-200'>
+        <div className='mx-auto max-w-2xl rounded-2xl bg-white/80 p-6 shadow-lg dark:bg-gray-900/80'>
+          <Trash2 className='mx-auto mb-3 size-14 text-gray-700 dark:text-gray-300' />
+          <p className='text-xl font-semibold leading-relaxed text-gray-800 dark:text-gray-200'>
             {item.instruction}
           </p>
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className='flex flex-col gap-4 sm:flex-row sm:justify-center'>
+      <div className='flex flex-wrap justify-center gap-4'>
         <Button
           variant='outline'
           size='lg'
           onClick={reset}
-          className='h-16 gap-3 text-xl font-semibold'
+          className='h-14 gap-3 text-lg font-semibold'
         >
-          <ArrowLeft className='size-6' />
-          Back
+          <ArrowLeft className='size-5' />
+          Назад
+        </Button>
+        <Button
+          variant='outline'
+          size='lg'
+          onClick={() => setIsDialogOpen(true)}
+          className='h-14 gap-3 text-lg font-semibold'
+        >
+          <Edit3 className='size-5' />
+          Не то, что я отсканировал?
         </Button>
         <Button
           size='lg'
           onClick={completeDisposal}
-          className={cn('h-16 gap-3 text-xl font-semibold', colorConfig.button)}
+          className={cn('h-14 gap-3 text-lg font-semibold', colorConfig.button)}
         >
-          <Trash2 className='size-6' />
-          Thrown Away
+          <Trash2 className='size-5' />
+          Выбросил(а)
         </Button>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className='max-h-[80vh] max-w-4xl overflow-y-auto'>
+          <DialogHeader>
+            <DialogTitle className='text-2xl'>Выберите предмет вручную</DialogTitle>
+            <DialogDescription className='text-base'>
+              Нажмите на нужный предмет для правильной сортировки отходов
+            </DialogDescription>
+          </DialogHeader>
+          <div className='mt-4'>
+            <WasteSelector onSelect={() => setIsDialogOpen(false)} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

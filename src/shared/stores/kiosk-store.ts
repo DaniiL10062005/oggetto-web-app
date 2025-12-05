@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { WASTE_ITEMS, type WasteItem } from '@/shared/config/waste-data'
+
+import { WASTE_ITEMS, type WasteItem } from '@/shared/mock/waste-data'
 
 type KioskStep = 'idle' | 'scanning' | 'instruction' | 'success'
 
