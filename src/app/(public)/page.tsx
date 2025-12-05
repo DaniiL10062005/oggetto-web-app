@@ -18,15 +18,15 @@ export default function KioskPage() {
         {(currentStep === 'idle' || currentStep === 'scanning') && (
           <div className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8'>
             <div className='text-center'>
-              <h1 className='text-6xl font-bold tracking-tight text-gray-900 dark:text-gray-50'>
+              <h1 className='text-6xl font-bold tracking-tight text-gray-900'>
                 Что вы хотите выбросить?
               </h1>
-              <p className='mt-4 text-2xl text-gray-600 dark:text-gray-400'>
+              <p className='mt-4 text-2xl text-gray-600'>
                 Поднесите предмет к камере для сканирования
               </p>
             </div>
 
-            <div className='w-full flex-1 max-w-5xl'>
+            <div className='w-full max-w-5xl flex-1'>
               <CameraFeed />
             </div>
           </div>

@@ -23,10 +23,17 @@ const ICON_MAP: Record<string, LucideIcon> = {
 }
 
 const BIN_COLOR_STYLES: Record<string, string> = {
-  yellow: 'border-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-950/20',
-  blue: 'border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20',
-  green: 'border-green-500 hover:bg-green-50 dark:hover:bg-green-950/20',
-  gray: 'border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-950/20',
+  yellow: 'border-yellow-500 hover:bg-yellow-50',
+  blue: 'border-blue-500 hover:bg-blue-50',
+  green: 'border-green-500 hover:bg-green-50',
+  gray: 'border-gray-500 hover:bg-gray-50',
+}
+
+const BIN_COLOR_TEXT_STYLES: Record<string, string> = {
+  yellow: 'text-yellow-500',
+  blue: 'text-blue-500',
+  green: 'text-green-500',
+  gray: 'text-gray-500',
 }
 
 interface WasteSelectorProps {
@@ -42,7 +49,7 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
   }
 
   return (
-    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
       {WASTE_ITEMS.map(item => {
         const Icon = ICON_MAP[item.iconName] || BottleWine
 
@@ -52,12 +59,14 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
             variant='outline'
             onClick={() => handleSelect(item.id)}
             className={cn(
-              'h-40 flex-col gap-4 border-4 text-lg font-semibold transition-all hover:scale-105 active:scale-95',
+              'h-auto min-h-[120px] flex-row items-center gap-4 border-4 p-6 text-left text-lg font-semibold transition-all hover:scale-105 active:scale-95',
               BIN_COLOR_STYLES[item.binColor],
             )}
           >
-            <Icon className='size-12' />
-            <span className='text-center'>{item.label}</span>
+            <Icon
+              className={cn('size-12 shrink-0', BIN_COLOR_TEXT_STYLES[item.binColor])}
+            />
+            <span className='wrap-break-word whitespace-normal'>{item.label}</span>
           </Button>
         )
       })}

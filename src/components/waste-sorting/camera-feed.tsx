@@ -20,18 +20,16 @@ export function CameraFeed() {
 
       console.log('Captured image:', imageSrc)
 
-      // Simulate AI detection - pick a random item after scan animation
       setTimeout(() => {
         setIsCapturing(false)
-        // Mock: Select first item (plastic bottle) as default
         const randomItem = WASTE_ITEMS[Math.floor(Math.random() * WASTE_ITEMS.length)]
         selectItem(randomItem.id)
-      }, 1000)
+      }, 3000)
     }
   }
 
   return (
-    <div className='relative flex h-full w-full flex-col overflow-hidden rounded-3xl border-4 border-gray-300 bg-gray-900 shadow-2xl dark:border-gray-700'>
+    <div className='relative flex h-full w-full flex-col overflow-hidden rounded-3xl border-4 border-gray-300 bg-gray-900 shadow-2xl'>
       <div className='relative flex-1'>
         <Webcam
           ref={webcamRef}

@@ -12,15 +12,10 @@ export function SuccessView() {
       </div>
 
       <div className='space-y-4'>
-        <h1 className='text-6xl font-black text-gray-900 dark:text-gray-50'>Отлично!</h1>
-        <p className='text-4xl font-bold text-green-600 dark:text-green-400'>
-          +10 Оджеттонов получено!
-        </p>
-        <p className='text-2xl text-gray-600 dark:text-gray-400'>
-          Спасибо за ответственную сортировку
-        </p>
+        <h1 className='text-6xl font-black text-gray-900'>Отлично!</h1>
+        <p className='text-4xl font-bold text-green-600'>+10 Оджеттонов получено!</p>
+        <p className='text-2xl text-gray-600'>Спасибо за ответственную сортировку</p>
       </div>
-
       <div className='flex gap-4'>
         {[...Array(5)].map((_, i) => (
           <div
