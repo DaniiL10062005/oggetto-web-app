@@ -1,18 +1,17 @@
-import { Montserrat } from 'next/font/google'
-
-import { TanstackQueryProvider } from '../shared/config/providers/tanstack-query-provider'
+import { Geist } from 'next/font/google'
 
 import './globals.css'
+import { TanstackQueryProvider } from '@/shared/config/providers/tanstack-query-provider'
 
-const montserrat = Montserrat({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+const geist = Geist({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-sans',
 })
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${montserrat.className} antialiased`}>
+      <body className={`${geist.className} antialiased`}>
         <TanstackQueryProvider>{children}</TanstackQueryProvider>
       </body>
     </html>
