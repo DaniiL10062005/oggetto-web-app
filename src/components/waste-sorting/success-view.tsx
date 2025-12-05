@@ -9,7 +9,17 @@ export function SuccessView() {
   useEffect(() => {
     const duration = 3000
     const animationEnd = Date.now() + duration
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 }
+    const defaults = {
+      startVelocity: 30,
+      spread: 90,
+      ticks: 120,
+      zIndex: 1000,
+      scalar: 1.2,
+      gravity: 1.5,
+      decay: 0.92,
+      useWorker: true,
+      disableForReducedMotion: false,
+    }
 
     function randomInRange(min: number, max: number) {
       return Math.random() * (max - min) + min
@@ -23,23 +33,25 @@ export function SuccessView() {
         return
       }
 
-      const particleCount = 50 * (timeLeft / duration)
+      const particleCount = Math.floor(40 * (timeLeft / duration))
 
       confetti({
         ...defaults,
-        particleCount,
+        particleCount: Math.max(particleCount, 100),
         origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
         colors: ['#10b981', '#14b8a6', '#06b6d4', '#3b82f6'],
       })
       confetti({
         ...defaults,
-        particleCount,
+        particleCount: Math.max(particleCount, 100),
         origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
         colors: ['#10b981', '#14b8a6', '#06b6d4', '#3b82f6'],
       })
     }, 250)
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+    }
   }, [])
 
   return (
