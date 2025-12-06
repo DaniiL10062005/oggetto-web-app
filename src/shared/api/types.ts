@@ -116,6 +116,7 @@ export interface Quest {
   id: string
   goal: number
   subject: QuestSubject
+  reward: number
   createdAt: string
 }
 

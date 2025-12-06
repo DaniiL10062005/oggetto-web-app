@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Calendar, Target } from 'lucide-react'
+import { Calendar, Coins, Target } from 'lucide-react'
 
 import type { QuestProgress } from '@/shared/api/types'
 import {
@@ -67,18 +67,23 @@ export function QuestCard({ questProgress, questType }: QuestCardProps) {
           </div>
         </CardHeader>
         <CardContent className='space-y-3'>
-          <div className='flex items-center gap-2'>
-            <Target className={`size-5 ${textColor}`} />
-            <span className='text-sm font-medium text-gray-700'>Прогресс:</span>
-            <span className={`text-2xl font-black ${textColor}`}>
-              {progress} / {quest.goal}
-            </span>
-            <span className='text-sm text-gray-600'>
-              {quest.goal === 1 ? 'предмет' : quest.goal < 5 ? 'предмета' : 'предметов'}
-            </span>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-2'>
+              <Target className={`size-5 ${textColor}`} />
+              <span className='text-sm font-medium text-gray-700'>Прогресс:</span>
+              <span className={`text-2xl font-black ${textColor}`}>
+                {progress} / {quest.goal}
+              </span>
+              <span className='text-sm text-gray-600'>
+                {quest.goal === 1 ? 'предмет' : quest.goal < 5 ? 'предмета' : 'предметов'}
+              </span>
+            </div>
+            <div className='flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1.5'>
+              <Coins className='size-4 text-amber-600' />
+              <span className='w- text-sm font-bold text-amber-700'>+{quest.reward}</span>
+            </div>
           </div>
 
-          {/* Progress Bar */}
           <div className='relative h-3 w-full overflow-hidden rounded-full bg-white'>
             <motion.div
               className={`h-full ${isDaily ? 'bg-blue-500' : 'bg-purple-500'}`}

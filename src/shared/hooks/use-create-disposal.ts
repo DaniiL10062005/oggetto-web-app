@@ -61,6 +61,11 @@ export function useCreateDisposal() {
           queryClient.invalidateQueries({ queryKey: ['point', pointId] })
         }
       }
+
+      // Invalidate quests to refetch and update progress
+      if (pointId) {
+        queryClient.invalidateQueries({ queryKey: ['quests', pointId] })
+      }
     },
 
     onError: error => {

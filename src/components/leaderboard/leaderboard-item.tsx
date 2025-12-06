@@ -1,6 +1,7 @@
 'use client'
 
 import { Medal } from 'lucide-react'
+
 import type { LeaderboardItem as LeaderboardItemType } from '@/shared/api/types'
 import { cn } from '@/shared/utils/class-names'
 
@@ -57,8 +58,7 @@ export function LeaderboardItem({ item }: LeaderboardItemProps) {
         isTopThree && 'shadow-md',
       )}
     >
-      {/* Rank */}
-      <div className="flex w-16 items-center justify-center">
+      <div className='flex w-16 items-center justify-center'>
         {isTopThree ? (
           <Medal className={cn('h-8 w-8', style.medalColor)} />
         ) : (
@@ -66,15 +66,13 @@ export function LeaderboardItem({ item }: LeaderboardItemProps) {
         )}
       </div>
 
-      {/* Name */}
-      <div className="flex-1">
+      <div className='flex-1'>
         <p className={cn('text-lg font-semibold', isTopThree && 'text-xl')}>{name}</p>
       </div>
 
-      {/* Coins */}
-      <div className="flex items-center gap-2">
-        <span className="text-2xl font-bold text-green-600">{coins}</span>
-        <span className="text-sm text-gray-500">коинов</span>
+      <div className='flex items-center gap-2'>
+        <span className='text-2xl font-bold text-green-600'>{coins}</span>
+        <span className='text-sm text-gray-500'>коинов</span>
       </div>
     </div>
   )

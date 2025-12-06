@@ -25,10 +25,6 @@ export async function categorizeItem(imageFile: File): Promise<CategorizeRespons
 }
 
 export async function createDisposal(data: CreateDisposalDto): Promise<DisposalResponse> {
-  data.type = 'Glass'
-  data.subtype = 'pet_bottle'
-  data.state = 'clean'
-
   const response = await apiClient.post<DisposalResponse>('/disposals', data)
   return response.data
 }
@@ -47,8 +43,10 @@ export async function getPointById(pointId: string): Promise<PointResponse> {
   return response.data
 }
 
-export async function getQuests(): Promise<AllQuestsResponse> {
-  const response = await apiClient.get<AllQuestsResponse>('/quests')
+export async function getQuests(pointId: string): Promise<AllQuestsResponse> {
+  const response = await apiClient.get<AllQuestsResponse>('/quests', {
+    params: { pointId },
+  })
   return response.data
 }
 
