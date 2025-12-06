@@ -3,7 +3,7 @@
 import confetti from 'canvas-confetti'
 import { motion } from 'framer-motion'
 import { CheckCircle2, Sparkles } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useCreateDisposal } from '@/shared/hooks/use-create-disposal'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
@@ -12,12 +12,23 @@ export function SuccessView() {
   const selectedItem = useKioskStore(state => state.selectedItem)
   const pointId = useKioskStore(state => state.pointId)
   const isInitialized = useKioskStore(state => state.isInitialized)
-  const { mutate: createDisposal } = useCreateDisposal()
+  const balance = useKioskStore(state => state.balance)
+
+  const { mutate: createDisposal, isPending } = useCreateDisposal()
+
+  const hasSubmittedRef = useRef(false)
+  const previousBalanceRef = useRef(balance)
   const [coinsEarned, setCoinsEarned] = useState(10)
-  const [isDisposalRecorded, setIsDisposalRecorded] = useState(false)
 
   useEffect(() => {
-    if (isDisposalRecorded) {
+    if (balance > previousBalanceRef.current) {
+      const earned = balance - previousBalanceRef.current
+      setCoinsEarned(earned)
+    }
+  }, [balance])
+
+  useEffect(() => {
+    if (hasSubmittedRef.current || isPending) {
       return
     }
 
@@ -31,6 +42,9 @@ export function SuccessView() {
       return
     }
 
+    hasSubmittedRef.current = true
+    previousBalanceRef.current = balance
+
     const [type, subtype] = selectedItem.id.split('-')
 
     createDisposal(
@@ -40,17 +54,14 @@ export function SuccessView() {
         state: 'disposed',
       },
       {
-        onSuccess: data => {
-          console.log('Утилизация записана! Новый баланс:', data.user.balance)
-          setIsDisposalRecorded(true)
-          setCoinsEarned(10)
-        },
         onError: error => {
           console.error('Не удалось записать утилизацию:', error)
+          hasSubmittedRef.current = false
         },
       },
     )
-  }, [selectedItem, isInitialized, pointId, createDisposal, isDisposalRecorded])
+  }, [selectedItem, isInitialized, pointId, isPending, createDisposal, balance])
+
   useEffect(() => {
     const duration = 3500
     const animationEnd = Date.now() + duration

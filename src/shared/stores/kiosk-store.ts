@@ -7,8 +7,9 @@ type KioskStep = 'idle' | 'scanning' | 'instruction' | 'success'
 interface KioskState {
   currentStep: KioskStep
   selectedItem: WasteItem | null
-  points: number
   pointId: string | null
+  pointName: string | null
+  balance: number
   isInitialized: boolean
   initError: string | null
 }
@@ -18,6 +19,8 @@ interface KioskActions {
   reset: () => void
   completeDisposal: () => void
   setPointId: (pointId: string) => void
+  setPointInfo: (pointId: string, pointName: string) => void
+  setBalance: (balance: number) => void
   setInitError: (error: string) => void
   setInitialized: (initialized: boolean) => void
 }
@@ -27,8 +30,9 @@ type KioskStore = KioskState & KioskActions
 export const useKioskStore = create<KioskStore>(set => ({
   currentStep: 'idle',
   selectedItem: null,
-  points: 0,
   pointId: null,
+  pointName: null,
+  balance: 0,
   isInitialized: false,
   initError: null,
 
@@ -50,10 +54,9 @@ export const useKioskStore = create<KioskStore>(set => ({
   },
 
   completeDisposal: () => {
-    set(state => ({
-      points: state.points + 10,
+    set({
       currentStep: 'success',
-    }))
+    })
 
     setTimeout(() => {
       set({
@@ -65,6 +68,14 @@ export const useKioskStore = create<KioskStore>(set => ({
 
   setPointId: (pointId: string) => {
     set({ pointId, isInitialized: true, initError: null })
+  },
+
+  setPointInfo: (pointId: string, pointName: string) => {
+    set({ pointId, pointName, isInitialized: true, initError: null })
+  },
+
+  setBalance: (balance: number) => {
+    set({ balance })
   },
 
   setInitError: (error: string) => {

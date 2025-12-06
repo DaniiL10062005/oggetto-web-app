@@ -9,11 +9,6 @@ import type {
   PointResponse,
 } from './types'
 
-export async function login(_login: string, _password: string): Promise<boolean> {
-  console.warn('login() устарела. Используйте статический APP_TOKEN из env.')
-  return false
-}
-
 export async function categorizeItem(imageFile: File): Promise<CategorizeResponse> {
   const formData = new FormData()
   formData.append('image', imageFile)
@@ -28,6 +23,10 @@ export async function categorizeItem(imageFile: File): Promise<CategorizeRespons
 }
 
 export async function createDisposal(data: CreateDisposalDto): Promise<DisposalResponse> {
+  data.type = 'Glass'
+  data.subtype = 'pet_bottle'
+  data.state = 'clean'
+
   const response = await apiClient.post<DisposalResponse>('/disposals', data)
   return response.data
 }
@@ -52,7 +51,6 @@ export async function getQuests(): Promise<AllQuestsResponse> {
 }
 
 export const wasteApi = {
-  login,
   categorizeItem,
   createDisposal,
   getPoints,

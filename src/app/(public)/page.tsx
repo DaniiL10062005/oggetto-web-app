@@ -1,9 +1,9 @@
 'use client'
 
+import { BalanceWidget } from '@/components/waste-sorting/balance-widget'
 import { CameraFeed } from '@/components/waste-sorting/camera-feed'
 import { InstructionView } from '@/components/waste-sorting/instruction-view'
 import { SuccessView } from '@/components/waste-sorting/success-view'
-import { TotalScore } from '@/components/waste-sorting/total-score'
 
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 
@@ -12,7 +12,7 @@ export default function KioskPage() {
 
   return (
     <div className='flex min-h-screen w-full flex-col overflow-y-auto lg:h-screen lg:overflow-hidden'>
-      <TotalScore />
+      <BalanceWidget />
 
       <div className='flex flex-1 flex-col items-center justify-center overflow-y-auto px-4 py-4 lg:overflow-hidden lg:px-8 lg:py-6'>
         {(currentStep === 'idle' || currentStep === 'scanning') && (

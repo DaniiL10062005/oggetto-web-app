@@ -4,10 +4,12 @@ import { motion, useAnimate } from 'framer-motion'
 import { Coins } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 
-import { useKioskStore } from '@/shared/stores/kiosk-store'
+import { usePointBalance } from '@/shared/hooks/use-point-balance'
 
-export function TotalScore() {
-  const points = useKioskStore(state => state.points)
+export function BalanceWidget() {
+  const { data: point } = usePointBalance()
+
+  const points = point?.balance ?? 0
   const [scope, animate] = useAnimate()
   const previousPoints = useRef(points)
 
