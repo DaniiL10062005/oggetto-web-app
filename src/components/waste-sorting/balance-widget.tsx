@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useAnimate } from 'framer-motion'
+import { motion, useAnimate, useMotionValue, useSpring } from 'framer-motion'
 import { Coins } from 'lucide-react'
 import { useEffect, useMemo, useRef } from 'react'
 
@@ -24,10 +24,27 @@ export function BalanceWidget() {
   }, [lastDisposal, point])
 
   const [scope, animate] = useAnimate()
-  const previousBalance = useRef(0)
+  const previousBalanceRef = useRef(currentBalance)
+  const balanceDisplayRef = useRef<HTMLParagraphElement>(null)
+  const isFirstRender = useRef(true)
+
+  const motionValue = useMotionValue(currentBalance)
+  const springValue = useSpring(motionValue, {
+    damping: 60,
+    stiffness: 100,
+  })
 
   useEffect(() => {
-    if (currentBalance > previousBalance.current && currentBalance > 0) {
+    if (isFirstRender.current) {
+      motionValue.set(currentBalance)
+      isFirstRender.current = false
+      previousBalanceRef.current = currentBalance
+      return
+    }
+
+    if (currentBalance > previousBalanceRef.current && currentBalance > 0) {
+      motionValue.set(currentBalance)
+
       animate(
         scope.current,
         {
@@ -45,8 +62,19 @@ export function BalanceWidget() {
         },
       )
     }
-    previousBalance.current = currentBalance
-  }, [currentBalance, animate, scope])
+
+    previousBalanceRef.current = currentBalance
+  }, [currentBalance, animate, scope, motionValue])
+
+  useEffect(() => {
+    const unsubscribe = springValue.on('change', latest => {
+      if (balanceDisplayRef.current) {
+        balanceDisplayRef.current.textContent = Math.round(latest).toString()
+      }
+    })
+
+    return () => unsubscribe()
+  }, [springValue])
 
   return (
     <motion.div
@@ -63,15 +91,12 @@ export function BalanceWidget() {
         <p className='text-[10px] font-semibold tracking-wider text-yellow-700 uppercase lg:text-xs'>
           Оджеттоны
         </p>
-        <motion.p
-          key={currentBalance}
-          initial={{ scale: 1.5, color: '#16a34a' }}
-          animate={{ scale: 1, color: '#78350f' }}
-          transition={{ duration: 0.3 }}
+        <p
+          ref={balanceDisplayRef}
           className='text-lg font-black text-yellow-900 lg:text-2xl'
         >
           {currentBalance}
-        </motion.p>
+        </p>
       </div>
     </motion.div>
   )

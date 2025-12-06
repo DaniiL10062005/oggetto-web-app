@@ -1,31 +1,67 @@
-'use client'
+"use client"
 
-import { motion, useSpring, useTransform } from 'framer-motion'
-import { useEffect } from 'react'
+import { ComponentPropsWithoutRef, useEffect, useRef } from "react"
+import { useInView, useMotionValue, useSpring } from "motion/react"
 
-import { cn } from '@/shared/utils/class-names'
+import { cn } from "@/shared/utils/class-names"
 
-interface NumberTickerProps {
+interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
   value: number
-  className?: string
-  duration?: number
+  startValue?: number
+  direction?: "up" | "down"
+  delay?: number
+  decimalPlaces?: number
 }
 
-export function NumberTicker({ value, className, duration = 2 }: NumberTickerProps) {
-  const spring = useSpring(0, {
-    bounce: 0,
-    duration: duration * 1000,
+export function NumberTicker({
+  value,
+  startValue = 0,
+  direction = "up",
+  delay = 0,
+  className,
+  decimalPlaces = 0,
+  ...props
+}: NumberTickerProps) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const motionValue = useMotionValue(direction === "down" ? value : startValue)
+  const springValue = useSpring(motionValue, {
+    damping: 60,
+    stiffness: 100,
   })
-
-  const display = useTransform(spring, current => Math.round(current))
+  const isInView = useInView(ref, { once: true, margin: "0px" })
 
   useEffect(() => {
-    spring.set(value)
-  }, [spring, value])
+    if (isInView) {
+      const timer = setTimeout(() => {
+        motionValue.set(direction === "down" ? startValue : value)
+      }, delay * 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [motionValue, isInView, delay, value, direction, startValue])
+
+  useEffect(
+    () =>
+      springValue.on("change", (latest) => {
+        if (ref.current) {
+          ref.current.textContent = Intl.NumberFormat("en-US", {
+            minimumFractionDigits: decimalPlaces,
+            maximumFractionDigits: decimalPlaces,
+          }).format(Number(latest.toFixed(decimalPlaces)))
+        }
+      }),
+    [springValue, decimalPlaces]
+  )
 
   return (
-    <motion.span className={cn('tabular-nums', className)}>
-      {display}
-    </motion.span>
+    <span
+      ref={ref}
+      className={cn(
+        "inline-block tracking-wider text-black tabular-nums dark:text-white",
+        className
+      )}
+      {...props}
+    >
+      {startValue}
+    </span>
   )
 }

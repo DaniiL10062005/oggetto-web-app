@@ -52,7 +52,6 @@ export function SuccessView() {
     }
 
     hasSubmittedRef.current = true
-    // Store current balance before disposal
     previousBalanceRef.current = lastDisposal?.user?.balance ?? point?.balance ?? 0
 
     const [type, subtype] = selectedItem.id.split('-')
