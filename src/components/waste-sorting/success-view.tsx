@@ -6,26 +6,37 @@ import { CheckCircle2, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import { useCreateDisposal } from '@/shared/hooks/use-create-disposal'
+import { usePointBalance } from '@/shared/hooks/use-point-balance'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 
 export function SuccessView() {
   const selectedItem = useKioskStore(state => state.selectedItem)
   const pointId = useKioskStore(state => state.pointId)
   const isInitialized = useKioskStore(state => state.isInitialized)
-  const balance = useKioskStore(state => state.balance)
+  const lastDisposal = useKioskStore(state => state.lastDisposal)
+
+  const { data: point } = usePointBalance()
 
   const { mutate: createDisposal, isPending } = useCreateDisposal()
 
   const hasSubmittedRef = useRef(false)
-  const previousBalanceRef = useRef(balance)
+  const previousBalanceRef = useRef(0)
   const [coinsEarned, setCoinsEarned] = useState(10)
 
   useEffect(() => {
-    if (balance > previousBalanceRef.current) {
-      const earned = balance - previousBalanceRef.current
+    let newBalance = 0
+
+    if (lastDisposal?.user?.balance !== undefined) {
+      newBalance = lastDisposal.user.balance
+    } else if (point?.balance !== undefined) {
+      newBalance = point.balance
+    }
+
+    if (newBalance > previousBalanceRef.current && previousBalanceRef.current > 0) {
+      const earned = newBalance - previousBalanceRef.current
       setCoinsEarned(earned)
     }
-  }, [balance])
+  }, [lastDisposal, point])
 
   useEffect(() => {
     if (hasSubmittedRef.current || isPending) {
@@ -33,17 +44,16 @@ export function SuccessView() {
     }
 
     if (!selectedItem) {
-      console.warn('Не выбран предмет для утилизации')
       return
     }
 
     if (!isInitialized || !pointId) {
-      console.warn('Киоск еще не инициализирован, ожидание...')
       return
     }
 
     hasSubmittedRef.current = true
-    previousBalanceRef.current = balance
+    // Store current balance before disposal
+    previousBalanceRef.current = lastDisposal?.user?.balance ?? point?.balance ?? 0
 
     const [type, subtype] = selectedItem.id.split('-')
 
@@ -60,7 +70,7 @@ export function SuccessView() {
         },
       },
     )
-  }, [selectedItem, isInitialized, pointId, isPending, createDisposal, balance])
+  }, [selectedItem, isInitialized, pointId, isPending, createDisposal, lastDisposal, point])
 
   useEffect(() => {
     const duration = 3500

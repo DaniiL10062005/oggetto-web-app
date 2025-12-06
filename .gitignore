@@ -46,3 +46,4 @@ next-env.d.ts
 CLAUDE.md
 /.cursor
 /.claude
+openapi.json

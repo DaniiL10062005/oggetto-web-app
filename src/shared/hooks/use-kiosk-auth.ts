@@ -22,8 +22,6 @@ export function useKioskAuth() {
           )
         }
 
-        console.log(`Поиск точки с логином: ${kioskLogin}`)
-
         const response = await getPoints({ limit: 100 })
 
         if (!response.data || response.data.length === 0) {
@@ -38,8 +36,6 @@ export function useKioskAuth() {
           )
         }
 
-        console.log(`Точка найдена: ${kioskPoint.name} (ID: ${kioskPoint.id})`)
-
         const verifiedPoint = await getPointById(kioskPoint.id)
 
         if (!verifiedPoint) {
@@ -47,10 +43,6 @@ export function useKioskAuth() {
             `Ошибка верификации: Не удалось получить данные точки с ID '${kioskPoint.id}'`,
           )
         }
-
-        console.log(
-          `[Инициализация] Точка верифицирована: ${verifiedPoint.name} | Баланс: ${verifiedPoint.balance} очков`,
-        )
 
         setPointInfo(verifiedPoint.id, verifiedPoint.name)
       } catch (error) {

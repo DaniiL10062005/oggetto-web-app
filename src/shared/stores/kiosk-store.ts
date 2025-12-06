@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 
+import type { DisposalResponse } from '@/shared/api/types'
 import { WASTE_ITEMS, type WasteItem } from '@/shared/mock/waste-data'
 
 type KioskStep = 'idle' | 'scanning' | 'instruction' | 'success'
@@ -9,9 +10,9 @@ interface KioskState {
   selectedItem: WasteItem | null
   pointId: string | null
   pointName: string | null
-  balance: number
   isInitialized: boolean
   initError: string | null
+  lastDisposal: DisposalResponse | null
 }
 
 interface KioskActions {
@@ -20,9 +21,9 @@ interface KioskActions {
   completeDisposal: () => void
   setPointId: (pointId: string) => void
   setPointInfo: (pointId: string, pointName: string) => void
-  setBalance: (balance: number) => void
   setInitError: (error: string) => void
   setInitialized: (initialized: boolean) => void
+  setLastDisposal: (disposal: DisposalResponse | null) => void
 }
 
 type KioskStore = KioskState & KioskActions
@@ -32,9 +33,9 @@ export const useKioskStore = create<KioskStore>(set => ({
   selectedItem: null,
   pointId: null,
   pointName: null,
-  balance: 0,
   isInitialized: false,
   initError: null,
+  lastDisposal: null,
 
   selectItem: (id: string) => {
     const item = WASTE_ITEMS.find(wasteItem => wasteItem.id === id)
@@ -74,15 +75,15 @@ export const useKioskStore = create<KioskStore>(set => ({
     set({ pointId, pointName, isInitialized: true, initError: null })
   },
 
-  setBalance: (balance: number) => {
-    set({ balance })
-  },
-
   setInitError: (error: string) => {
     set({ initError: error, isInitialized: false })
   },
 
   setInitialized: (initialized: boolean) => {
     set({ isInitialized: initialized })
+  },
+
+  setLastDisposal: (disposal: DisposalResponse | null) => {
+    set({ lastDisposal: disposal })
   },
 }))

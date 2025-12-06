@@ -2,19 +2,32 @@
 
 import { motion, useAnimate } from 'framer-motion'
 import { Coins } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 import { usePointBalance } from '@/shared/hooks/use-point-balance'
+import { useKioskStore } from '@/shared/stores/kiosk-store'
 
 export function BalanceWidget() {
+  const lastDisposal = useKioskStore(state => state.lastDisposal)
   const { data: point } = usePointBalance()
 
-  const points = point?.balance ?? 0
+  const currentBalance = useMemo(() => {
+    if (lastDisposal?.user?.balance !== undefined) {
+      return lastDisposal.user.balance
+    }
+
+    if (point?.balance !== undefined) {
+      return point.balance
+    }
+
+    return 0
+  }, [lastDisposal, point])
+
   const [scope, animate] = useAnimate()
-  const previousPoints = useRef(points)
+  const previousBalance = useRef(0)
 
   useEffect(() => {
-    if (points > previousPoints.current) {
+    if (currentBalance > previousBalance.current && currentBalance > 0) {
       animate(
         scope.current,
         {
@@ -32,15 +45,18 @@ export function BalanceWidget() {
         },
       )
     }
-    previousPoints.current = points
-  }, [points, animate, scope])
+    previousBalance.current = currentBalance
+  }, [currentBalance, animate, scope])
 
   return (
     <motion.div
       ref={scope}
       className='fixed top-3 right-3 z-50 flex items-center gap-2 rounded-full border-2 border-yellow-500 bg-yellow-50 px-3 py-2 shadow-xl lg:top-6 lg:right-6 lg:gap-3 lg:border-4 lg:px-6 lg:py-3'
     >
-      <motion.div animate={{ rotate: points > 0 ? 360 : 0 }} transition={{ duration: 0.5 }}>
+      <motion.div
+        animate={{ rotate: currentBalance > 0 ? 360 : 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <Coins className='size-5 text-yellow-600 lg:size-8' />
       </motion.div>
       <div className='text-right'>
@@ -48,13 +64,13 @@ export function BalanceWidget() {
           Оджеттоны
         </p>
         <motion.p
-          key={points}
+          key={currentBalance}
           initial={{ scale: 1.5, color: '#16a34a' }}
           animate={{ scale: 1, color: '#78350f' }}
           transition={{ duration: 0.3 }}
           className='text-lg font-black text-yellow-900 lg:text-2xl'
         >
-          {points}
+          {currentBalance}
         </motion.p>
       </div>
     </motion.div>

@@ -15,7 +15,7 @@ interface CreateDisposalParams {
 export function useCreateDisposal() {
   const queryClient = useQueryClient()
   const pointId = useKioskStore(state => state.pointId)
-  const setBalance = useKioskStore(state => state.setBalance)
+  const setLastDisposal = useKioskStore(state => state.setLastDisposal)
 
   return useMutation({
     mutationFn: async (params: CreateDisposalParams) => {
@@ -34,28 +34,32 @@ export function useCreateDisposal() {
     },
 
     onSuccess: (data: DisposalResponse) => {
+      setLastDisposal(data)
+
       if (pointId && data.user) {
-        setBalance(data.user.balance)
+        queryClient.setQueryData<PointResponse>(['point', pointId], oldData => {
+          const newData = !oldData
+            ? {
+                id: data.user.id,
+                name: data.user.name,
+                login: data.user.login,
+                balance: data.user.balance,
+                score: data.user.score,
+              }
+            : {
+                ...oldData,
+                balance: data.user.balance,
+                score: data.user.score,
+              }
 
-        queryClient.setQueryData<PointResponse>(['point-balance', pointId], oldData => {
-          if (!oldData) {
-            return {
-              id: data.user.id,
-              name: data.user.name,
-              login: data.user.login,
-              balance: data.user.balance,
-              score: data.user.score,
-            }
-          }
-
-          return {
-            ...oldData,
-            balance: data.user.balance,
-            score: data.user.score,
-          }
+          return newData
         })
 
-        console.log('Утилизация записана успешно. Новый баланс:', data.user.balance)
+        // const verifyCache = queryClient.getQueryData<PointResponse>(['point', pointId])
+      } else {
+        if (pointId && !data.user) {
+          queryClient.invalidateQueries({ queryKey: ['point', pointId] })
+        }
       }
     },
 

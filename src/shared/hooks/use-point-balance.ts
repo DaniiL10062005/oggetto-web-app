@@ -9,7 +9,7 @@ export function usePointBalance() {
   const pointId = useKioskStore(state => state.pointId)
 
   return useQuery({
-    queryKey: ['point-balance', pointId],
+    queryKey: ['point', pointId],
     queryFn: () => {
       if (!pointId) {
         throw new Error('Point ID не инициализирован')
@@ -17,7 +17,7 @@ export function usePointBalance() {
       return getPointById(pointId)
     },
     enabled: !!pointId,
-    refetchInterval: 10000,
-    staleTime: 5000,
+    staleTime: 30000,
+    gcTime: 5 * 60 * 1000,
   })
 }
