@@ -3,11 +3,11 @@
 import { motion } from 'framer-motion'
 
 import { QuestCard } from './quest-card'
-import type { Quest } from '@/shared/api/types'
+import type { QuestProgress } from '@/shared/api/types'
 
 interface QuestListProps {
-  dailyQuests: Quest[]
-  weeklyQuest: Quest | null
+  dailyQuests: QuestProgress[]
+  weeklyQuest: QuestProgress | null
 }
 
 export function QuestList({ dailyQuests, weeklyQuest }: QuestListProps) {
@@ -44,7 +44,7 @@ export function QuestList({ dailyQuests, weeklyQuest }: QuestListProps) {
             <span className='text-3xl'>🏆</span>
             Еженедельный квест
           </h2>
-          <QuestCard quest={weeklyQuest} questType='weekly' />
+          <QuestCard questProgress={weeklyQuest} questType='weekly' />
         </motion.section>
       )}
 
@@ -59,14 +59,14 @@ export function QuestList({ dailyQuests, weeklyQuest }: QuestListProps) {
             Ежедневные квесты
           </h2>
           <div className='grid gap-4 lg:grid-cols-2'>
-            {dailyQuests.map((quest, index) => (
+            {dailyQuests.map((questProgress, index) => (
               <motion.div
-                key={quest.id}
+                key={questProgress.quest.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <QuestCard quest={quest} questType='daily' />
+                <QuestCard questProgress={questProgress} questType='daily' />
               </motion.div>
             ))}
           </div>

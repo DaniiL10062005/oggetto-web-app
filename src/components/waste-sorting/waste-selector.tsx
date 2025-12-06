@@ -9,8 +9,8 @@ import {
   Wine,
 } from 'lucide-react'
 
-import { Button } from '@/shared/components/button'
 import { GarbageState, GarbageSubtype, GarbageType } from '@/shared/api/types'
+import { Button } from '@/shared/components/button'
 import { WASTE_ITEMS } from '@/shared/mock/waste-data'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 import { cn } from '@/shared/utils/class-names'
@@ -38,12 +38,35 @@ const BIN_COLOR_TEXT_STYLES: Record<string, string> = {
   gray: 'text-gray-500',
 }
 
-const WASTE_ITEM_MAPPING: Record<string, { type: GarbageType; subtype: GarbageSubtype; state: GarbageState }> = {
-  'plastic-bottle': { type: GarbageType.Plastic, subtype: GarbageSubtype.PetBottle, state: GarbageState.Clean },
-  'coffee-cup': { type: GarbageType.Trash, subtype: GarbageSubtype.Unknown, state: GarbageState.Unknown },
-  'office-paper': { type: GarbageType.Paper, subtype: GarbageSubtype.Unknown, state: GarbageState.Clean },
-  'plastic-food-container': { type: GarbageType.Plastic, subtype: GarbageSubtype.PetContainer, state: GarbageState.Clean },
-  'glass-bottle': { type: GarbageType.Glass, subtype: GarbageSubtype.Unknown, state: GarbageState.Clean },
+const WASTE_ITEM_MAPPING: Record<
+  string,
+  { type: GarbageType; subtype: GarbageSubtype; state: GarbageState }
+> = {
+  'plastic-bottle': {
+    type: GarbageType.Plastic,
+    subtype: GarbageSubtype.PetBottle,
+    state: GarbageState.Clean,
+  },
+  'coffee-cup': {
+    type: GarbageType.Trash,
+    subtype: GarbageSubtype.Unknown,
+    state: GarbageState.Unknown,
+  },
+  'office-paper': {
+    type: GarbageType.Paper,
+    subtype: GarbageSubtype.Unknown,
+    state: GarbageState.Clean,
+  },
+  'plastic-food-container': {
+    type: GarbageType.Plastic,
+    subtype: GarbageSubtype.PetContainer,
+    state: GarbageState.Clean,
+  },
+  'glass-bottle': {
+    type: GarbageType.Glass,
+    subtype: GarbageSubtype.Unknown,
+    state: GarbageState.Clean,
+  },
 }
 
 interface WasteSelectorProps {
@@ -78,7 +101,10 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
             )}
           >
             <Icon
-              className={cn('size-8 shrink-0 lg:size-12', BIN_COLOR_TEXT_STYLES[item.binColor])}
+              className={cn(
+                'size-8 shrink-0 lg:size-12',
+                BIN_COLOR_TEXT_STYLES[item.binColor],
+              )}
             />
             <span className='wrap-break-word whitespace-normal'>{item.label}</span>
           </Button>

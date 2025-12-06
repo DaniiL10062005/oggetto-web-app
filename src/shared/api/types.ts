@@ -107,7 +107,7 @@ export interface GetPointsParams {
 
 export interface QuestSubject {
   type: string
-  subtype: string
+  subtype?: string
 }
 
 export interface Quest {
@@ -117,9 +117,15 @@ export interface Quest {
   createdAt: string
 }
 
+export interface QuestProgress {
+  quest: Quest
+  progress: number
+  completed: boolean
+}
+
 export interface AllQuestsResponse {
-  daily: Quest[]
-  weekly: Quest | null
+  daily: QuestProgress[]
+  weekly: QuestProgress | null
 }
 
 export interface ApiError {
@@ -127,4 +133,22 @@ export interface ApiError {
   code?: string
   statusCode: number
   details?: unknown
+}
+
+export type LeaderboardPeriod = 'daily' | 'week' | 'month'
+
+export interface LeaderboardItem {
+  userId: string
+  name: string
+  coins: number
+  rank: number
+}
+
+export interface LeaderboardResponse {
+  data: LeaderboardItem[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+  period: LeaderboardPeriod
 }

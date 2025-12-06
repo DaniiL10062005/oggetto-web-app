@@ -5,6 +5,8 @@ import type {
   CreateDisposalDto,
   DisposalResponse,
   GetPointsParams,
+  LeaderboardPeriod,
+  LeaderboardResponse,
   PaginatedPointResponse,
   PointResponse,
 } from './types'
@@ -50,10 +52,26 @@ export async function getQuests(): Promise<AllQuestsResponse> {
   return response.data
 }
 
+export interface GetLeaderboardParams {
+  period: LeaderboardPeriod
+  page?: number
+  limit?: number
+}
+
+export async function getLeaderboard(
+  params: GetLeaderboardParams,
+): Promise<LeaderboardResponse> {
+  const response = await apiClient.get<LeaderboardResponse>('/leaderboard', {
+    params,
+  })
+  return response.data
+}
+
 export const wasteApi = {
   categorizeItem,
   createDisposal,
   getPoints,
   getPointById,
   getQuests,
+  getLeaderboard,
 }
