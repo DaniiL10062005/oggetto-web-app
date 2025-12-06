@@ -23,7 +23,7 @@ export function KioskInitializer({ children }: KioskInitializerProps) {
           </div>
           <div className='space-y-2'>
             <h1 className='text-2xl font-bold text-red-900'>Ошибка инициализации киоска</h1>
-            <p className='text-sm text-red-700 whitespace-pre-line'>{initError}</p>
+            <p className='text-sm whitespace-pre-line text-red-700'>{initError}</p>
           </div>
           <p className='text-xs text-gray-500'>
             Пожалуйста, свяжитесь с поддержкой или проверьте настройки окружения.
@@ -36,10 +36,23 @@ export function KioskInitializer({ children }: KioskInitializerProps) {
   if (!isInitialized) {
     return (
       <div className='flex h-screen w-screen items-center justify-center bg-gray-50'>
-        <div className='flex flex-col items-center gap-4'>
-          <div className='h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-green-600' />
-          <p className='text-sm font-medium text-gray-600'>Инициализация киоска...</p>
-          <p className='text-xs text-gray-500'>Подключение к серверу и проверка конфигурации</p>
+        <div className='flex flex-col items-center gap-6'>
+          <p className='text-2xl font-medium text-gray-600'>Инициализация киоска...</p>
+          <div className='flex gap-2'>
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className='size-3 rounded-full bg-green-600'
+                style={{
+                  animation: `pulse 1s ease-in-out infinite`,
+                  animationDelay: `${i * 0.1}s`,
+                }}
+              />
+            ))}
+          </div>
+          <p className='text-sm text-gray-500'>
+            Подключение к серверу и проверка конфигурации
+          </p>
         </div>
       </div>
     )

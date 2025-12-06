@@ -57,20 +57,21 @@ export interface GetPointsParams {
   sortByScore?: SortDirection
 }
 
-export interface QuestResponse {
+export interface QuestSubject {
+  type: string
+  subtype: string
+}
+
+export interface Quest {
   id: string
-  title: string
-  description: string
-  reward: number
-  target: number
-  progress: number
-  completed: boolean
-  type?: string
-  expiresAt?: string
+  goal: number
+  subject: QuestSubject
+  createdAt: string
 }
 
 export interface AllQuestsResponse {
-  quests: QuestResponse[]
+  daily: Quest[]
+  weekly: Quest | null
 }
 
 export interface ApiError {
