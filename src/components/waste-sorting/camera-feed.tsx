@@ -4,27 +4,41 @@ import { Camera, ScanLine } from 'lucide-react'
 import { useRef, useState } from 'react'
 import Webcam from 'react-webcam'
 
+import { categorizeItem } from '@/shared/api/waste-api'
 import { Button } from '@/shared/components/button'
-import { WASTE_ITEMS } from '@/shared/mock/waste-data'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
+import { mapCategorizationToWaste } from '@/shared/utils/waste-mapping'
 
 export function CameraFeed() {
   const webcamRef = useRef<Webcam>(null)
   const [isCapturing, setIsCapturing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const selectItem = useKioskStore(state => state.selectItem)
 
-  const handleCapture = () => {
-    if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot()
+  const handleCapture = async () => {
+    if (!webcamRef.current) return
+
+    try {
       setIsCapturing(true)
+      setError(null)
 
-      console.log('Сделан снимок:', imageSrc)
+      const imageSrc = webcamRef.current.getScreenshot()
+      if (!imageSrc) {
+        throw new Error('Не удалось сделать снимок')
+      }
 
-      setTimeout(() => {
-        setIsCapturing(false)
-        const randomItem = WASTE_ITEMS[Math.floor(Math.random() * WASTE_ITEMS.length)]
-        selectItem(randomItem.id)
-      }, 3000)
+      const blob = await fetch(imageSrc).then(res => res.blob())
+      const imageFile = new File([blob], 'waste-image.jpg', { type: 'image/jpeg' })
+
+      const response = await categorizeItem(imageFile)
+
+      const classification = mapCategorizationToWaste(response)
+      selectItem(classification)
+    } catch (err) {
+      console.error('Ошибка при классификации:', err)
+      setError('Не удалось распознать предмет. Попробуйте еще раз.')
+    } finally {
+      setIsCapturing(false)
     }
   }
 
@@ -48,6 +62,16 @@ export function CameraFeed() {
             <div className='absolute inset-0 flex items-center justify-center bg-green-500/20'>
               <div className='animate-pulse rounded-xl bg-green-500 p-4 lg:rounded-2xl lg:p-6'>
                 <ScanLine className='size-12 text-white lg:size-20' />
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className='absolute inset-0 flex items-center justify-center bg-red-500/20'>
+              <div className='rounded-xl bg-red-500 px-6 py-4 lg:rounded-2xl lg:px-8 lg:py-6'>
+                <p className='text-center text-sm font-semibold text-white lg:text-lg'>
+                  {error}
+                </p>
               </div>
             </div>
           )}

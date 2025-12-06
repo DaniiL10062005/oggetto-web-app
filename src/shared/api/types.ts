@@ -1,15 +1,63 @@
+export const GarbageType = {
+  Cardboard: 'Cardboard',
+  Glass: 'Glass',
+  Metal: 'Metal',
+  Paper: 'Paper',
+  Plastic: 'Plastic',
+  Trash: 'Trash',
+} as const
+
+export type GarbageType = (typeof GarbageType)[keyof typeof GarbageType]
+
+export const GarbageSubtype = {
+  PetBottle: 'pet_bottle',
+  PetBottleWhite: 'pet_bottle_white',
+  PetContainer: 'pet_container',
+  HdpeContainer: 'hdpe_container',
+  HdpeFilm: 'hdpe_film',
+  HdpeBag: 'hdpe_bag',
+  PpContainer: 'pp_container',
+  PpLarge: 'pp_large',
+  PpBag: 'pp_bag',
+  FoamPackaging: 'foam_packaging',
+  FoamEgg: 'foam_egg',
+  FoamBuilding: 'foam_building',
+  FoamFood: 'foam_food',
+  BlisterPack: 'blister_pack',
+  Toothbrush: 'toothbrush',
+  PlasticCard: 'plastic_card',
+  Tube: 'tube',
+  Receipt: 'receipt',
+  Unknown: 'unknown',
+} as const
+
+export type GarbageSubtype = (typeof GarbageSubtype)[keyof typeof GarbageSubtype]
+
+export const GarbageState = {
+  Clean: 'clean',
+  Dirty: 'dirty',
+  HeavilyDirty: 'heavily_dirty',
+  FoodContaminated: 'food_contaminated',
+  WithLabels: 'with_labels',
+  NoLabels: 'no_labels',
+  Compressed: 'compressed',
+  Damaged: 'damaged',
+  Unknown: 'unknown',
+} as const
+
+export type GarbageState = (typeof GarbageState)[keyof typeof GarbageState]
+
 export interface CategorizeResponse {
-  category: string
-  confidence: number
-  instructions?: string
-  imageUrl?: string
+  type: GarbageType
+  subtype: GarbageSubtype
+  state: GarbageState
 }
 
 export interface CreateDisposalDto {
   pointId: string
-  type: string
-  subtype: string
-  state: string
+  type: GarbageType
+  subtype: GarbageSubtype
+  state: GarbageState
 }
 
 export interface DisposalResponse {

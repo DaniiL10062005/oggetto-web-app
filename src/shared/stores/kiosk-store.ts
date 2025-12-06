@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 
 import type { DisposalResponse } from '@/shared/api/types'
-import { WASTE_ITEMS, type WasteItem } from '@/shared/mock/waste-data'
+import type { WasteClassification } from '@/shared/utils/waste-mapping'
 
 type KioskStep = 'idle' | 'scanning' | 'instruction' | 'success'
 
 interface KioskState {
   currentStep: KioskStep
-  selectedItem: WasteItem | null
+  selectedItem: WasteClassification | null
   pointId: string | null
   pointName: string | null
   isInitialized: boolean
@@ -16,7 +16,7 @@ interface KioskState {
 }
 
 interface KioskActions {
-  selectItem: (id: string) => void
+  selectItem: (classification: WasteClassification) => void
   reset: () => void
   completeDisposal: () => void
   setPointId: (pointId: string) => void
@@ -37,14 +37,11 @@ export const useKioskStore = create<KioskStore>(set => ({
   initError: null,
   lastDisposal: null,
 
-  selectItem: (id: string) => {
-    const item = WASTE_ITEMS.find(wasteItem => wasteItem.id === id)
-    if (item) {
-      set({
-        selectedItem: item,
-        currentStep: 'instruction',
-      })
-    }
+  selectItem: (classification: WasteClassification) => {
+    set({
+      selectedItem: classification,
+      currentStep: 'instruction',
+    })
   },
 
   reset: () => {

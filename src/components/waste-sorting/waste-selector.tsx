@@ -10,9 +10,11 @@ import {
 } from 'lucide-react'
 
 import { Button } from '@/shared/components/button'
+import { GarbageState, GarbageSubtype, GarbageType } from '@/shared/api/types'
 import { WASTE_ITEMS } from '@/shared/mock/waste-data'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 import { cn } from '@/shared/utils/class-names'
+import { mapCategorizationToWaste } from '@/shared/utils/waste-mapping'
 
 const ICON_MAP: Record<string, LucideIcon> = {
   bottle: BottleWine,
@@ -36,6 +38,14 @@ const BIN_COLOR_TEXT_STYLES: Record<string, string> = {
   gray: 'text-gray-500',
 }
 
+const WASTE_ITEM_MAPPING: Record<string, { type: GarbageType; subtype: GarbageSubtype; state: GarbageState }> = {
+  'plastic-bottle': { type: GarbageType.Plastic, subtype: GarbageSubtype.PetBottle, state: GarbageState.Clean },
+  'coffee-cup': { type: GarbageType.Trash, subtype: GarbageSubtype.Unknown, state: GarbageState.Unknown },
+  'office-paper': { type: GarbageType.Paper, subtype: GarbageSubtype.Unknown, state: GarbageState.Clean },
+  'plastic-food-container': { type: GarbageType.Plastic, subtype: GarbageSubtype.PetContainer, state: GarbageState.Clean },
+  'glass-bottle': { type: GarbageType.Glass, subtype: GarbageSubtype.Unknown, state: GarbageState.Clean },
+}
+
 interface WasteSelectorProps {
   onSelect?: () => void
 }
@@ -44,7 +54,11 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
   const selectItem = useKioskStore(state => state.selectItem)
 
   const handleSelect = (id: string) => {
-    selectItem(id)
+    const mapping = WASTE_ITEM_MAPPING[id]
+    if (mapping) {
+      const classification = mapCategorizationToWaste(mapping)
+      selectItem(classification)
+    }
     onSelect?.()
   }
 

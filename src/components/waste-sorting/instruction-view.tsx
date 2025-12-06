@@ -13,12 +13,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/dialog'
-import type { WasteItem } from '@/shared/mock/waste-data'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 import { cn } from '@/shared/utils/class-names'
+import type { WasteClassification } from '@/shared/utils/waste-mapping'
 
 interface InstructionViewProps {
-  item: WasteItem
+  item: WasteClassification
 }
 
 const BIN_COLOR_CONFIG = {
@@ -79,7 +79,7 @@ export function InstructionView({ item }: InstructionViewProps) {
         </div>
 
         <div className='mb-3 lg:mb-6'>
-          <p className='text-xl font-bold text-gray-900 lg:text-3xl'>{item.label}</p>
+          <p className='text-xl font-bold text-gray-900 lg:text-3xl'>{item.displayLabel}</p>
         </div>
 
         <div className='mx-auto max-w-2xl rounded-xl bg-white/80 p-4 shadow-lg lg:rounded-2xl lg:p-6'>
@@ -112,17 +112,22 @@ export function InstructionView({ item }: InstructionViewProps) {
         <Button
           size='lg'
           onClick={completeDisposal}
-          className={cn('h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg', colorConfig.button)}
+          className={cn(
+            'h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg',
+            colorConfig.button,
+          )}
         >
           <Trash2 className='size-4 lg:size-5' />
-          Выбросил(а)
+          Выбросил
         </Button>
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className='max-h-[80vh] max-w-4xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle className='text-xl lg:text-2xl'>Выберите предмет вручную</DialogTitle>
+            <DialogTitle className='text-xl lg:text-2xl'>
+              Выберите предмет вручную
+            </DialogTitle>
             <DialogDescription className='text-sm lg:text-base'>
               Нажмите на нужный предмет для правильной сортировки отходов
             </DialogDescription>

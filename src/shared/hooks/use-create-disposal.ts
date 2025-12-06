@@ -2,14 +2,14 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import type { DisposalResponse, PointResponse } from '@/shared/api/types'
+import type { DisposalResponse, GarbageState, GarbageSubtype, GarbageType, PointResponse } from '@/shared/api/types'
 import { createDisposal } from '@/shared/api/waste-api'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 
 interface CreateDisposalParams {
-  type: string
-  subtype: string
-  state: string
+  type: GarbageType
+  subtype: GarbageSubtype
+  state: GarbageState
 }
 
 export function useCreateDisposal() {

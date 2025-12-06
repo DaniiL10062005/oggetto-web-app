@@ -54,13 +54,11 @@ export function SuccessView() {
     hasSubmittedRef.current = true
     previousBalanceRef.current = lastDisposal?.user?.balance ?? point?.balance ?? 0
 
-    const [type, subtype] = selectedItem.id.split('-')
-
     createDisposal(
       {
-        type: type || 'waste',
-        subtype: subtype || selectedItem.label,
-        state: 'disposed',
+        type: selectedItem.type,
+        subtype: selectedItem.subtype,
+        state: selectedItem.state,
       },
       {
         onError: error => {
