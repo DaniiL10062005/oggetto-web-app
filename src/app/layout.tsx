@@ -1,5 +1,7 @@
 import { Geist } from 'next/font/google'
 
+import { KioskInitializer } from '@/components/kiosk/kiosk-initializer'
+
 import './globals.css'
 import { TanstackQueryProvider } from '@/shared/config/providers/tanstack-query-provider'
 
@@ -14,7 +16,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body
         className={`${geist.className} min-h-screen overflow-y-auto antialiased lg:h-screen lg:overflow-hidden`}
       >
-        <TanstackQueryProvider>{children}</TanstackQueryProvider>
+        <TanstackQueryProvider>
+          <KioskInitializer>{children}</KioskInitializer>
+        </TanstackQueryProvider>
       </body>
     </html>
   )

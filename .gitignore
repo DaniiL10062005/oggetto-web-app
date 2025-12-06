@@ -43,6 +43,5 @@ yarn-error.log*
 next-env.d.ts
 
 # slop
-CLAUDE.md
 /.cursor
 /.claude

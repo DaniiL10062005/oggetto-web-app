@@ -3,11 +3,56 @@
 import confetti from 'canvas-confetti'
 import { motion } from 'framer-motion'
 import { CheckCircle2, Sparkles } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
+import { useCreateDisposal } from '@/shared/hooks/use-create-disposal'
+import { useKioskStore } from '@/shared/stores/kiosk-store'
 
 export function SuccessView() {
+  const selectedItem = useKioskStore(state => state.selectedItem)
+  const pointId = useKioskStore(state => state.pointId)
+  const isInitialized = useKioskStore(state => state.isInitialized)
+  const { mutate: createDisposal } = useCreateDisposal()
+  const [coinsEarned, setCoinsEarned] = useState(10)
+  const [isDisposalRecorded, setIsDisposalRecorded] = useState(false)
+
   useEffect(() => {
-    const duration = 3000
+    if (isDisposalRecorded) {
+      return
+    }
+
+    if (!selectedItem) {
+      console.warn('Не выбран предмет для утилизации')
+      return
+    }
+
+    if (!isInitialized || !pointId) {
+      console.warn('Киоск еще не инициализирован, ожидание...')
+      return
+    }
+
+    const [type, subtype] = selectedItem.id.split('-')
+
+    createDisposal(
+      {
+        type: type || 'waste',
+        subtype: subtype || selectedItem.label,
+        state: 'disposed',
+      },
+      {
+        onSuccess: data => {
+          console.log('Утилизация записана! Новый баланс:', data.user.balance)
+          setIsDisposalRecorded(true)
+          setCoinsEarned(10)
+        },
+        onError: error => {
+          console.error('Не удалось записать утилизацию:', error)
+        },
+      },
+    )
+  }, [selectedItem, isInitialized, pointId, createDisposal, isDisposalRecorded])
+  useEffect(() => {
+    const duration = 3500
     const animationEnd = Date.now() + duration
     const defaults = {
       startVelocity: 30,
@@ -97,7 +142,7 @@ export function SuccessView() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
         >
-          10 Оджеттонов!
+          +{coinsEarned} Оджеттонов!
         </motion.div>
         <motion.p
           className='text-lg text-gray-600 lg:text-2xl'

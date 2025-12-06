@@ -8,12 +8,18 @@ interface KioskState {
   currentStep: KioskStep
   selectedItem: WasteItem | null
   points: number
+  pointId: string | null
+  isInitialized: boolean
+  initError: string | null
 }
 
 interface KioskActions {
   selectItem: (id: string) => void
   reset: () => void
   completeDisposal: () => void
+  setPointId: (pointId: string) => void
+  setInitError: (error: string) => void
+  setInitialized: (initialized: boolean) => void
 }
 
 type KioskStore = KioskState & KioskActions
@@ -22,6 +28,9 @@ export const useKioskStore = create<KioskStore>(set => ({
   currentStep: 'idle',
   selectedItem: null,
   points: 0,
+  pointId: null,
+  isInitialized: false,
+  initError: null,
 
   selectItem: (id: string) => {
     const item = WASTE_ITEMS.find(wasteItem => wasteItem.id === id)
@@ -51,6 +60,18 @@ export const useKioskStore = create<KioskStore>(set => ({
         currentStep: 'idle',
         selectedItem: null,
       })
-    }, 2000)
+    }, 2500)
+  },
+
+  setPointId: (pointId: string) => {
+    set({ pointId, isInitialized: true, initError: null })
+  },
+
+  setInitError: (error: string) => {
+    set({ initError: error, isInitialized: false })
+  },
+
+  setInitialized: (initialized: boolean) => {
+    set({ isInitialized: initialized })
   },
 }))

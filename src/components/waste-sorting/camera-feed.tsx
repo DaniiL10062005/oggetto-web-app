@@ -18,7 +18,7 @@ export function CameraFeed() {
       const imageSrc = webcamRef.current.getScreenshot()
       setIsCapturing(true)
 
-      console.log('Captured image:', imageSrc)
+      console.log('Сделан снимок:', imageSrc)
 
       setTimeout(() => {
         setIsCapturing(false)
