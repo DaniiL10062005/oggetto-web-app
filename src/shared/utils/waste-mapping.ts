@@ -10,9 +10,10 @@ export interface WasteClassification {
   type: GarbageType
   subtype: GarbageSubtype
   state: GarbageState
+  accepted: boolean
+  text: string
   binColor: BinColor
   binLabel: string
-  instruction: string
   displayLabel: string
 }
 
@@ -47,58 +48,17 @@ const SUBTYPE_LABELS: Record<GarbageSubtype, string> = {
   unknown: 'Неизвестный предмет',
 }
 
-function getInstructionForItem(
-  type: GarbageType,
-  subtype: GarbageSubtype,
-  state: GarbageState,
-): string {
-  const instructions: string[] = []
-
-  if (state === 'dirty' || state === 'heavily_dirty' || state === 'food_contaminated') {
-    instructions.push('Промойте от загрязнений')
-  }
-
-  if (state === 'with_labels' && type === 'Plastic') {
-    instructions.push('Желательно снять этикетки')
-  }
-
-  if (subtype && subtype.includes('bottle') && type === 'Plastic') {
-    instructions.push('Снимите крышку и сдавите')
-  }
-
-  if (subtype && subtype.includes('bottle') && type === 'Glass') {
-    instructions.push('Снимите крышку')
-  }
-
-  if (type === 'Paper' || type === 'Cardboard') {
-    instructions.push('Убедитесь, что нет скрепок и зажимов')
-  }
-
-  if (state === 'damaged' && type !== 'Trash') {
-    instructions.push('Поврежденные предметы могут не подлежать переработке')
-  }
-
-  if (type === 'Trash') {
-    instructions.push('Не подлежит переработке')
-  }
-
-  if (instructions.length === 0) {
-    instructions.push('Положите в соответствующий контейнер')
-  }
-
-  return instructions.join('. ')
-}
-
 export function mapCategorizationToWaste(
   response: CategorizeResponse,
 ): WasteClassification {
   const type = response.type || 'Trash'
   const subtype = response.subtype || 'unknown'
   const state = response.state || 'unknown'
+  const text = response.text || ''
+  const accepted = response.accepted || true
 
   const binInfo = TYPE_TO_BIN[type]
   const displayLabel = SUBTYPE_LABELS[subtype] || 'Неизвестный предмет'
-  const instruction = getInstructionForItem(type, subtype, state)
 
   return {
     type,
@@ -106,7 +66,8 @@ export function mapCategorizationToWaste(
     state,
     binColor: binInfo.color,
     binLabel: binInfo.label,
-    instruction,
     displayLabel,
+    text,
+    accepted,
   }
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, Edit3, Trash2 } from 'lucide-react'
+import { ArrowLeft, Edit3, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
 
 import { WasteSelector } from '@/components/waste-sorting/waste-selector'
@@ -48,10 +48,20 @@ const BIN_COLOR_CONFIG = {
   },
 }
 
+const BIN_COLOR_NON_RECYCLABLE = {
+  bg: 'bg-red-100',
+  border: 'border-red-500',
+  text: 'text-red-900',
+  button: 'bg-red-600 hover:bg-red-700 text-white',
+}
+
 export function InstructionView({ item }: InstructionViewProps) {
   const { completeDisposal, reset } = useKioskStore()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const colorConfig = BIN_COLOR_CONFIG[item.binColor]
+  const colorConfig = item.accepted
+    ? BIN_COLOR_CONFIG[item.binColor]
+    : BIN_COLOR_NON_RECYCLABLE
+  const paragraphs = item.text.split(/\n+/).filter(Boolean)
 
   return (
     <div className='flex h-full w-full max-w-6xl flex-col justify-center gap-3 lg:gap-6'>
@@ -83,10 +93,19 @@ export function InstructionView({ item }: InstructionViewProps) {
         </div>
 
         <div className='mx-auto max-w-2xl rounded-xl bg-white/80 p-4 shadow-lg lg:rounded-2xl lg:p-6'>
-          <Trash2 className='mx-auto mb-2 size-8 text-gray-700 lg:mb-3 lg:size-14' />
-          <p className='text-base leading-relaxed font-semibold text-gray-800 lg:text-xl'>
-            {item.instruction}
-          </p>
+          {item.accepted ? (
+            <Trash2 className='mx-auto mb-2 size-8 text-gray-700 lg:mb-3 lg:size-14' />
+          ) : (
+            <X className='mx-auto mb-2 size-8 text-red-700 lg:mb-3 lg:size-14' />
+          )}
+          {paragraphs.map((paragraph, index) => (
+            <p
+              className='text-start text-base leading-relaxed font-semibold text-gray-800 lg:text-xl'
+              key={index}
+            >
+              {paragraph}
+            </p>
+          ))}
         </div>
       </div>
 
@@ -109,17 +128,19 @@ export function InstructionView({ item }: InstructionViewProps) {
           <Edit3 className='size-4 lg:size-5' />
           Не то, что я отсканировал?
         </Button>
-        <Button
-          size='lg'
-          onClick={completeDisposal}
-          className={cn(
-            'h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg',
-            colorConfig.button,
-          )}
-        >
-          <Trash2 className='size-4 lg:size-5' />
-          Выбросил
-        </Button>
+        {item.accepted && (
+          <Button
+            size='lg'
+            onClick={completeDisposal}
+            className={cn(
+              'h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg',
+              colorConfig.button,
+            )}
+          >
+            <Trash2 className='size-4 lg:size-5' />
+            Выбросил
+          </Button>
+        )}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

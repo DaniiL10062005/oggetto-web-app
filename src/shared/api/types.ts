@@ -51,6 +51,8 @@ export interface CategorizeResponse {
   type: GarbageType
   subtype: GarbageSubtype
   state: GarbageState
+  accepted: boolean
+  text: string
 }
 
 export interface CreateDisposalDto {
