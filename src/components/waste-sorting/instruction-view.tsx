@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowLeft, Edit3, Trash2, X } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Edit3, Trash2, XCircle } from 'lucide-react'
 import { useState } from 'react'
 
 import { WasteSelector } from '@/components/waste-sorting/waste-selector'
@@ -14,131 +14,106 @@ import {
   DialogTitle,
 } from '@/shared/components/dialog'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
-import { cn } from '@/shared/utils/class-names'
 import type { WasteClassification } from '@/shared/utils/waste-mapping'
 
 interface InstructionViewProps {
   item: WasteClassification
 }
 
-const BIN_COLOR_CONFIG = {
-  yellow: {
-    bg: 'bg-yellow-100',
-    border: 'border-yellow-500',
-    text: 'text-yellow-900',
-    button: 'bg-yellow-600 hover:bg-yellow-700 text-white',
-  },
-  blue: {
-    bg: 'bg-blue-100',
-    border: 'border-blue-500',
-    text: 'text-blue-900',
-    button: 'bg-blue-600 hover:bg-blue-700 text-white',
-  },
-  green: {
-    bg: 'bg-green-100',
-    border: 'border-green-500',
-    text: 'text-green-900',
-    button: 'bg-green-600 hover:bg-green-700 text-white',
-  },
-  gray: {
-    bg: 'bg-gray-100',
-    border: 'border-gray-500',
-    text: 'text-gray-900',
-    button: 'bg-gray-600 hover:bg-gray-700 text-white',
-  },
-}
-
-const BIN_COLOR_NON_RECYCLABLE = {
-  bg: 'bg-red-100',
-  border: 'border-red-500',
-  text: 'text-red-900',
-  button: 'bg-red-600 hover:bg-red-700 text-white',
-}
+const BIN_COLOR_LABELS = {
+  yellow: 'Желтый',
+  blue: 'Синий',
+  green: 'Зеленый',
+  gray: 'Серый',
+} as const
 
 export function InstructionView({ item }: InstructionViewProps) {
   const { completeDisposal, reset } = useKioskStore()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const colorConfig = item.accepted
-    ? BIN_COLOR_CONFIG[item.binColor]
-    : BIN_COLOR_NON_RECYCLABLE
-  const paragraphs = item.text.split(/\n+/).filter(Boolean)
+  const steps = item.text.split(/\n+/).filter(Boolean)
 
   return (
-    <div className='flex h-full w-full max-w-6xl flex-col justify-center gap-3 lg:gap-6'>
-      <div
-        className={cn(
-          'rounded-2xl border-4 p-4 text-center lg:rounded-3xl lg:border-8 lg:p-10',
-          colorConfig.bg,
-          colorConfig.border,
-        )}
-      >
-        <div className={cn('mb-3 lg:mb-6', colorConfig.text)}>
-          <p className='text-sm font-semibold tracking-wider uppercase lg:text-xl'>
-            Контейнер: {item.binLabel}
-          </p>
-          <h1 className='mt-1 text-3xl font-black tracking-tight uppercase lg:mt-2 lg:text-6xl'>
-            {item.binColor === 'yellow'
-              ? 'ЖЕЛТЫЙ'
-              : item.binColor === 'blue'
-                ? 'СИНИЙ'
-                : item.binColor === 'green'
-                  ? 'ЗЕЛЕНЫЙ'
-                  : 'СЕРЫЙ'}{' '}
-            КОНТЕЙНЕР
-          </h1>
-        </div>
-
-        <div className='mb-3 lg:mb-6'>
-          <p className='text-xl font-bold text-gray-900 lg:text-3xl'>{item.displayLabel}</p>
-        </div>
-
-        <div className='mx-auto max-w-2xl rounded-xl bg-white/80 p-4 shadow-lg lg:rounded-2xl lg:p-6'>
+    <div className='flex h-full w-full max-w-6xl flex-col justify-center gap-6 lg:gap-8'>
+      <div className='flex flex-col overflow-hidden rounded-2xl bg-white shadow-xl lg:rounded-3xl'>
+        <div className='bg-brand-gray px-6 py-8 text-center lg:px-10 lg:py-12'>
           {item.accepted ? (
-            <Trash2 className='mx-auto mb-2 size-8 text-gray-700 lg:mb-3 lg:size-14' />
+            <CheckCircle2 className='text-brand-black mx-auto mb-4 size-16 lg:mb-6 lg:size-24' />
           ) : (
-            <X className='mx-auto mb-2 size-8 text-red-700 lg:mb-3 lg:size-14' />
+            <XCircle className='mx-auto mb-4 size-16 text-red-600 lg:mb-6 lg:size-24' />
           )}
-          {paragraphs.map((paragraph, index) => (
-            <p
-              className='text-start text-base leading-relaxed font-semibold text-gray-800 lg:text-xl'
-              key={index}
-            >
-              {paragraph}
-            </p>
-          ))}
+          <h1 className='text-brand-black mb-2 text-2xl font-bold lg:mb-3 lg:text-4xl'>
+            {item.accepted ? 'Подготовьте к переработке' : 'Не подлежит переработке'}
+          </h1>
+          <p className='text-base text-zinc-500 lg:text-xl'>
+            {item.displayLabel} • {BIN_COLOR_LABELS[item.binColor]} контейнер
+          </p>
+        </div>
+
+        <div className='flex-1 px-6 py-8 lg:px-10 lg:py-12'>
+          {item.accepted ? (
+            <>
+              <div className='mb-6 lg:mb-8'>
+                <p className='text-brand-black text-lg font-semibold lg:text-2xl'>
+                  Следуйте{' '}
+                  {steps.length === 1 ? 'этому шагу' : `этим ${steps.length} шагам`}
+                </p>
+              </div>
+
+              <div className='space-y-6 lg:space-y-8'>
+                {steps.map((step, index) => (
+                  <div className='flex gap-4 lg:gap-6' key={index}>
+                    <div className='bg-brand-yellow flex h-12 w-12 shrink-0 items-center justify-center rounded-full lg:h-14 lg:w-14'>
+                      <span className='text-brand-black text-xl font-bold lg:text-2xl'>
+                        {index + 1}
+                      </span>
+                    </div>
+
+                    <div className='flex flex-1 items-center'>
+                      <p className='text-brand-black text-lg leading-relaxed font-medium lg:text-2xl'>
+                        {step}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className='rounded-xl bg-red-50 p-6 lg:p-8'>
+              <p className='text-brand-black text-lg leading-relaxed font-medium lg:text-2xl'>
+                {item.text ||
+                  'Этот предмет не подлежит переработке. Пожалуйста, выбросьте его в контейнер для смешанных отходов.'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className='flex flex-col justify-center gap-2 sm:flex-row sm:flex-wrap sm:gap-4'>
+      <div className='flex flex-wrap justify-center gap-3 lg:gap-4'>
         <Button
           variant='outline'
           size='lg'
           onClick={reset}
-          className='h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg'
+          className='border-brand-black text-brand-black h-12 gap-2 border-2 bg-white px-6 text-base font-bold transition-all hover:scale-[1.02] hover:opacity-90 lg:h-16 lg:gap-3 lg:px-8 lg:text-xl'
         >
-          <ArrowLeft className='size-4 lg:size-5' />
+          <ArrowLeft className='size-5 lg:size-6' />
           Назад
         </Button>
         <Button
           variant='outline'
           size='lg'
           onClick={() => setIsDialogOpen(true)}
-          className='h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg'
+          className='border-brand-black text-brand-black h-12 gap-2 border-2 bg-white px-6 text-base font-bold transition-all hover:scale-[1.02] hover:opacity-90 lg:h-16 lg:gap-3 lg:px-8 lg:text-xl'
         >
-          <Edit3 className='size-4 lg:size-5' />
+          <Edit3 className='size-5 lg:size-6' />
           Не то, что я отсканировал?
         </Button>
         {item.accepted && (
           <Button
             size='lg'
             onClick={completeDisposal}
-            className={cn(
-              'h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg',
-              colorConfig.button,
-            )}
+            className='bg-brand-yellow text-brand-black h-12 gap-2 px-6 text-base font-bold transition-all hover:scale-[1.02] hover:opacity-90 lg:h-16 lg:gap-3 lg:px-8 lg:text-xl'
           >
-            <Trash2 className='size-4 lg:size-5' />
-            Выбросил
+            <Trash2 className='size-5 lg:size-6' />Я выбросил
           </Button>
         )}
       </div>

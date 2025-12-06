@@ -43,7 +43,7 @@ export function CameraFeed() {
   }
 
   return (
-    <div className='relative flex h-full w-full flex-col overflow-hidden rounded-2xl bg-linear-to-br from-cyan-200 to-green-600 p-1 shadow-2xl lg:rounded-3xl'>
+    <div className='bg-brand-yellow relative flex h-full w-full flex-col overflow-hidden rounded-2xl p-1 shadow-2xl lg:rounded-3xl'>
       <div className='relative flex h-full w-full flex-col overflow-hidden rounded-[16px] bg-gray-900 lg:rounded-[20px]'>
         <div className='relative flex-1'>
           <Webcam
@@ -88,7 +88,7 @@ export function CameraFeed() {
               size='lg'
               onClick={handleCapture}
               disabled={isCapturing}
-              className='h-12 gap-2 rounded-full bg-blue-600 px-6 text-base font-semibold shadow-2xl hover:bg-blue-700 disabled:opacity-50 lg:h-16 lg:gap-3 lg:px-10 lg:text-xl'
+              className='bg-brand-yellow text-brand-black hover:bg-brand-yellow/90 h-12 gap-2 rounded-full px-6 text-base font-bold shadow-2xl disabled:opacity-50 lg:h-16 lg:gap-3 lg:px-10 lg:text-xl'
             >
               <ScanLine className='size-5 lg:size-6' />
               {isCapturing ? 'Сканирование...' : 'Сканировать предмет'}

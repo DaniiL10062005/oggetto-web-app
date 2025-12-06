@@ -40,32 +40,48 @@ const BIN_COLOR_TEXT_STYLES: Record<string, string> = {
 
 const WASTE_ITEM_MAPPING: Record<
   string,
-  { type: GarbageType; subtype: GarbageSubtype; state: GarbageState }
+  {
+    type: GarbageType
+    subtype: GarbageSubtype
+    state: GarbageState
+    accepted: boolean
+    text: string
+  }
 > = {
   'plastic-bottle': {
     type: GarbageType.Plastic,
     subtype: GarbageSubtype.PetBottle,
     state: GarbageState.Clean,
+    accepted: true,
+    text: 'Пластиковая бутылка принята',
   },
   'coffee-cup': {
     type: GarbageType.Trash,
     subtype: GarbageSubtype.Unknown,
     state: GarbageState.Unknown,
+    accepted: true,
+    text: 'Одноразовый стаканчик принят',
   },
   'office-paper': {
     type: GarbageType.Paper,
     subtype: GarbageSubtype.Unknown,
     state: GarbageState.Clean,
+    accepted: true,
+    text: 'Офисная бумага принята',
   },
   'plastic-food-container': {
     type: GarbageType.Plastic,
     subtype: GarbageSubtype.PetContainer,
     state: GarbageState.Clean,
+    accepted: true,
+    text: 'Пластиковый контейнер принят',
   },
   'glass-bottle': {
     type: GarbageType.Glass,
     subtype: GarbageSubtype.Unknown,
     state: GarbageState.Clean,
+    accepted: true,
+    text: 'Стеклянная бутылка принята',
   },
 }
 
@@ -79,7 +95,10 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
   const handleSelect = (id: string) => {
     const mapping = WASTE_ITEM_MAPPING[id]
     if (mapping) {
-      const classification = mapCategorizationToWaste(mapping)
+      const classification = mapCategorizationToWaste({
+        ...mapping,
+        text: '',
+      })
       selectItem(classification)
     }
     onSelect?.()

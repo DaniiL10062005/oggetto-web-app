@@ -23,8 +23,8 @@ export function QuestList({ dailyQuests, weeklyQuest }: QuestListProps) {
       >
         <div className='text-center'>
           <div className='mb-4 text-6xl'>🎯</div>
-          <h3 className='text-2xl font-bold text-gray-900'>Нет активных квестов</h3>
-          <p className='mt-2 text-gray-600'>
+          <h3 className='text-brand-black text-2xl font-bold'>Нет активных квестов</h3>
+          <p className='mt-2 text-zinc-600'>
             Новые квесты появятся скоро. Проверьте позже!
           </p>
         </div>
@@ -33,15 +33,15 @@ export function QuestList({ dailyQuests, weeklyQuest }: QuestListProps) {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-8'>
       {hasWeeklyQuest && (
         <motion.section
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className='mb-4 flex items-center gap-2 text-2xl font-bold text-gray-900'>
-            <span className='text-3xl'>🏆</span>
+          <h2 className='text-brand-black mb-5 flex items-center gap-3 text-2xl font-black lg:text-3xl'>
+            <span className='text-4xl lg:text-5xl'>🏆</span>
             Еженедельный квест
           </h2>
           <QuestCard questProgress={weeklyQuest} questType='weekly' />
@@ -54,8 +54,8 @@ export function QuestList({ dailyQuests, weeklyQuest }: QuestListProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
         >
-          <h2 className='mb-4 flex items-center gap-2 text-2xl font-bold text-gray-900'>
-            <span className='text-3xl'>⭐</span>
+          <h2 className='text-brand-black mb-5 flex items-center gap-3 text-2xl font-black lg:text-3xl'>
+            <span className='text-4xl lg:text-5xl'>⭐</span>
             Ежедневные квесты
           </h2>
           <div className='grid gap-4 lg:grid-cols-2'>

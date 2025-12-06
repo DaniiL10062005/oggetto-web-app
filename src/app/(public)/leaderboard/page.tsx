@@ -19,27 +19,27 @@ export default function LeaderboardPage() {
   })
 
   return (
-    <div className='flex h-screen flex-col overflow-hidden'>
-      <header className='border-b bg-white px-6 py-4 shadow-sm lg:px-8 lg:py-6'>
+    <div className='bg-brand-gray flex h-screen flex-col overflow-hidden'>
+      <header className='border-brand-black/10 bg-brand-black border-b px-6 py-4 shadow-sm lg:px-8 lg:py-6'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-4'>
             <Link
               href='/'
-              className='flex items-center gap-2 rounded-lg px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900'
+              className='flex items-center gap-2 rounded-lg px-3 py-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white'
             >
               <ArrowLeft className='size-5' />
               <span className='text-sm font-medium'>Назад</span>
             </Link>
-            <div className='h-8 w-px bg-gray-300' />
+            <div className='h-8 w-px bg-zinc-700' />
             <div className='flex items-center gap-3'>
-              <div className='flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-yellow-500 to-green-500 shadow-lg'>
-                <Trophy className='size-7 text-white' />
+              <div className='bg-brand-yellow flex size-12 items-center justify-center rounded-full shadow-lg'>
+                <Trophy className='text-brand-black size-7' />
               </div>
               <div>
-                <h1 className='text-2xl font-black text-gray-900 lg:text-3xl'>
+                <h1 className='text-2xl font-black text-white lg:text-3xl'>
                   Таблица лидеров
                 </h1>
-                <p className='text-sm text-gray-600 lg:text-base'>
+                <p className='text-sm text-zinc-400 lg:text-base'>
                   Рейтинг офисов по количеству коинов
                 </p>
               </div>
