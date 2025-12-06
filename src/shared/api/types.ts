@@ -13,21 +13,35 @@ export const GarbageSubtype = {
   PetBottle: 'pet_bottle',
   PetBottleWhite: 'pet_bottle_white',
   PetContainer: 'pet_container',
+
   HdpeContainer: 'hdpe_container',
   HdpeFilm: 'hdpe_film',
   HdpeBag: 'hdpe_bag',
+
   PpContainer: 'pp_container',
   PpLarge: 'pp_large',
   PpBag: 'pp_bag',
+
   FoamPackaging: 'foam_packaging',
   FoamEgg: 'foam_egg',
   FoamBuilding: 'foam_building',
   FoamFood: 'foam_food',
+
   BlisterPack: 'blister_pack',
   Toothbrush: 'toothbrush',
   PlasticCard: 'plastic_card',
   Tube: 'tube',
+
   Receipt: 'receipt',
+  PaperSheet: 'paper_sheet',
+  CardboardBox: 'cardboard_box',
+
+  GlassBottle: 'glass_bottle',
+  GlassJar: 'glass_jar',
+
+  MetalCan: 'metal_can',
+  AluminumCan: 'aluminum_can',
+
   Unknown: 'unknown',
 } as const
 
@@ -38,10 +52,13 @@ export const GarbageState = {
   Dirty: 'dirty',
   HeavilyDirty: 'heavily_dirty',
   FoodContaminated: 'food_contaminated',
+
   WithLabels: 'with_labels',
   NoLabels: 'no_labels',
+
   Compressed: 'compressed',
   Damaged: 'damaged',
+
   Unknown: 'unknown',
 } as const
 

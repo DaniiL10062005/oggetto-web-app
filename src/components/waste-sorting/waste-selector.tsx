@@ -65,7 +65,7 @@ const WASTE_ITEM_MAPPING: Record<
   },
   'office-paper': {
     type: GarbageType.Paper,
-    subtype: GarbageSubtype.Unknown,
+    subtype: GarbageSubtype.PaperSheet,
     state: GarbageState.Clean,
     accepted: true,
     text: 'Офисная бумага принята',
@@ -79,7 +79,7 @@ const WASTE_ITEM_MAPPING: Record<
   },
   'glass-bottle': {
     type: GarbageType.Glass,
-    subtype: GarbageSubtype.Unknown,
+    subtype: GarbageSubtype.GlassBottle,
     state: GarbageState.Clean,
     accepted: true,
     text: 'Стеклянная бутылка принята',

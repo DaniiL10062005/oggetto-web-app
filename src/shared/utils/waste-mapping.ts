@@ -30,21 +30,35 @@ const SUBTYPE_LABELS: Record<GarbageSubtype, string> = {
   pet_bottle: 'ПЭТ бутылка',
   pet_bottle_white: 'ПЭТ бутылка (белая)',
   pet_container: 'ПЭТ контейнер',
+
   hdpe_container: 'HDPE контейнер',
-  hdpe_film: 'HDPE пленка',
+  hdpe_film: 'HDPE плёнка',
   hdpe_bag: 'HDPE пакет',
+
   pp_container: 'PP контейнер',
   pp_large: 'PP крупный',
   pp_bag: 'PP пакет',
+
   foam_packaging: 'Пенопласт (упаковка)',
   foam_egg: 'Пенопласт (яичный лоток)',
   foam_building: 'Пенопласт (строительный)',
   foam_food: 'Пенопласт (пищевой)',
+
   blister_pack: 'Блистерная упаковка',
-  toothbrush: 'Зубная щетка',
+  toothbrush: 'Зубная щётка',
   plastic_card: 'Пластиковая карта',
   tube: 'Тюбик',
+
   receipt: 'Чек',
+  paper_sheet: 'Бумажный лист',
+  cardboard_box: 'Картонная коробка',
+
+  glass_bottle: 'Стеклянная бутылка',
+  glass_jar: 'Стеклянная банка',
+
+  metal_can: 'Металлическая банка',
+  aluminum_can: 'Алюминиевая банка',
+
   unknown: 'Неизвестный предмет',
 }
 
