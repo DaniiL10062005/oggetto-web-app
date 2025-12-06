@@ -62,11 +62,11 @@ function getInstructionForItem(
     instructions.push('Желательно снять этикетки')
   }
 
-  if (subtype.includes('bottle') && type === 'Plastic') {
+  if (subtype && subtype.includes('bottle') && type === 'Plastic') {
     instructions.push('Снимите крышку и сдавите')
   }
 
-  if (subtype.includes('bottle') && type === 'Glass') {
+  if (subtype && subtype.includes('bottle') && type === 'Glass') {
     instructions.push('Снимите крышку')
   }
 
@@ -92,14 +92,18 @@ function getInstructionForItem(
 export function mapCategorizationToWaste(
   response: CategorizeResponse,
 ): WasteClassification {
-  const binInfo = TYPE_TO_BIN[response.type]
-  const displayLabel = SUBTYPE_LABELS[response.subtype]
-  const instruction = getInstructionForItem(response.type, response.subtype, response.state)
+  const type = response.type || 'Trash'
+  const subtype = response.subtype || 'unknown'
+  const state = response.state || 'unknown'
+
+  const binInfo = TYPE_TO_BIN[type]
+  const displayLabel = SUBTYPE_LABELS[subtype] || 'Неизвестный предмет'
+  const instruction = getInstructionForItem(type, subtype, state)
 
   return {
-    type: response.type,
-    subtype: response.subtype,
-    state: response.state,
+    type,
+    subtype,
+    state,
     binColor: binInfo.color,
     binLabel: binInfo.label,
     instruction,
