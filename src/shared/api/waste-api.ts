@@ -4,6 +4,8 @@ import type {
   CategorizeResponse,
   CreateDisposalDto,
   DisposalResponse,
+  GetDisposalDto,
+  GetDisposalResponse,
   GetPointsParams,
   LeaderboardPeriod,
   LeaderboardResponse,
@@ -26,6 +28,11 @@ export async function categorizeItem(imageFile: File): Promise<CategorizeRespons
 
 export async function createDisposal(data: CreateDisposalDto): Promise<DisposalResponse> {
   const response = await apiClient.post<DisposalResponse>('/disposals', data)
+  return response.data
+}
+
+export async function getDisposal(data: GetDisposalDto): Promise<GetDisposalResponse> {
+  const response = await apiClient.get<GetDisposalResponse>('/disposals', { params: data })
   return response.data
 }
 

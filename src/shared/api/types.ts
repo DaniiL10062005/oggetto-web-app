@@ -62,6 +62,16 @@ export interface CreateDisposalDto {
   state: GarbageState
 }
 
+export interface GetDisposalDto {
+  type: GarbageType
+  subtype: GarbageSubtype
+  state: GarbageState
+}
+export interface GetDisposalResponse {
+  text: string
+  accepted: boolean
+}
+
 export interface DisposalResponse {
   id: string
   type: string

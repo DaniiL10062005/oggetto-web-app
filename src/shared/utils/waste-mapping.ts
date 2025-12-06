@@ -51,10 +51,10 @@ const SUBTYPE_LABELS: Record<GarbageSubtype, string> = {
 export function mapCategorizationToWaste(
   response: CategorizeResponse,
 ): WasteClassification {
-  const type = response.type || 'Trash'
-  const subtype = response.subtype || 'unknown'
-  const state = response.state || 'unknown'
-  const text = response.text || ''
+  const type = !response.accepted ? 'Trash' : (response.type ?? 'Trash')
+  const subtype = response.subtype ?? 'unknown'
+  const state = response.state ?? 'unknown'
+  const text = response.text ?? ''
   const accepted = response.accepted && true
 
   const binInfo = TYPE_TO_BIN[type]

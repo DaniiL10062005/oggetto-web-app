@@ -11,6 +11,7 @@ import {
 
 import { GarbageState, GarbageSubtype, GarbageType } from '@/shared/api/types'
 import { Button } from '@/shared/components/button'
+import { useGetDisposal } from '@/shared/hooks/use-get-disposal'
 import { WASTE_ITEMS } from '@/shared/mock/waste-data'
 import { useKioskStore } from '@/shared/stores/kiosk-store'
 import { cn } from '@/shared/utils/class-names'
@@ -91,19 +92,27 @@ interface WasteSelectorProps {
 
 export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
   const selectItem = useKioskStore(state => state.selectItem)
+  const disposalMutation = useGetDisposal()
 
-  const handleSelect = (id: string) => {
+  const handleSelect = async (id: string) => {
     const mapping = WASTE_ITEM_MAPPING[id]
-    if (mapping) {
-      const classification = mapCategorizationToWaste({
-        ...mapping,
-        text: '',
-      })
-      selectItem(classification)
-    }
+    if (!mapping) return
+
+    const result = await disposalMutation.mutateAsync({
+      type: mapping.type,
+      subtype: mapping.subtype,
+      state: mapping.state,
+    })
+
+    const classification = mapCategorizationToWaste({
+      ...mapping,
+      text: result.text,
+      accepted: result.accepted,
+    })
+
+    selectItem(classification)
     onSelect?.()
   }
-
   return (
     <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-6'>
       {WASTE_ITEMS.map(item => {
@@ -115,7 +124,7 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
             variant='outline'
             onClick={() => handleSelect(item.id)}
             className={cn(
-              'h-auto min-h-[80px] flex-row items-center gap-3 border-2 p-4 text-left text-base font-semibold transition-all hover:scale-105 active:scale-95 lg:min-h-[120px] lg:gap-4 lg:border-4 lg:p-6 lg:text-lg',
+              'h-auto min-h-20 flex-row items-center gap-3 border-2 p-4 text-left text-base font-semibold transition-all hover:scale-105 active:scale-95 lg:min-h-[120px] lg:gap-4 lg:border-4 lg:p-6 lg:text-lg',
               BIN_COLOR_STYLES[item.binColor],
             )}
           >
