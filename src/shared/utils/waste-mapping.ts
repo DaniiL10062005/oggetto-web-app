@@ -55,7 +55,7 @@ export function mapCategorizationToWaste(
   const subtype = response.subtype || 'unknown'
   const state = response.state || 'unknown'
   const text = response.text || ''
-  const accepted = response.accepted || true
+  const accepted = response.accepted && true
 
   const binInfo = TYPE_TO_BIN[type]
   const displayLabel = SUBTYPE_LABELS[subtype] || 'Неизвестный предмет'

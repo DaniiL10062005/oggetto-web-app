@@ -70,7 +70,7 @@ export function InstructionView({ item }: InstructionViewProps) {
 
                     <div className='flex flex-1 items-center'>
                       <p className='text-brand-black text-lg leading-relaxed font-medium lg:text-2xl'>
-                        {step}
+                        {step.slice(3)}
                       </p>
                     </div>
                   </div>
