@@ -49,7 +49,7 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
   }
 
   return (
-    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
+    <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-6'>
       {WASTE_ITEMS.map(item => {
         const Icon = ICON_MAP[item.iconName] || BottleWine
 
@@ -59,12 +59,12 @@ export function WasteSelector({ onSelect }: WasteSelectorProps = {}) {
             variant='outline'
             onClick={() => handleSelect(item.id)}
             className={cn(
-              'h-auto min-h-[120px] flex-row items-center gap-4 border-4 p-6 text-left text-lg font-semibold transition-all hover:scale-105 active:scale-95',
+              'h-auto min-h-[80px] flex-row items-center gap-3 border-2 p-4 text-left text-base font-semibold transition-all hover:scale-105 active:scale-95 lg:min-h-[120px] lg:gap-4 lg:border-4 lg:p-6 lg:text-lg',
               BIN_COLOR_STYLES[item.binColor],
             )}
           >
             <Icon
-              className={cn('size-12 shrink-0', BIN_COLOR_TEXT_STYLES[item.binColor])}
+              className={cn('size-8 shrink-0 lg:size-12', BIN_COLOR_TEXT_STYLES[item.binColor])}
             />
             <span className='wrap-break-word whitespace-normal'>{item.label}</span>
           </Button>

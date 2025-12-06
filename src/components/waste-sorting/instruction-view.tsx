@@ -54,19 +54,19 @@ export function InstructionView({ item }: InstructionViewProps) {
   const colorConfig = BIN_COLOR_CONFIG[item.binColor]
 
   return (
-    <div className='flex h-full w-full max-w-6xl flex-col justify-center gap-6'>
+    <div className='flex h-full w-full max-w-6xl flex-col justify-center gap-3 lg:gap-6'>
       <div
         className={cn(
-          'rounded-3xl border-8 p-10 text-center',
+          'rounded-2xl border-4 p-4 text-center lg:rounded-3xl lg:border-8 lg:p-10',
           colorConfig.bg,
           colorConfig.border,
         )}
       >
-        <div className={cn('mb-6', colorConfig.text)}>
-          <p className='text-xl font-semibold tracking-wider uppercase'>
+        <div className={cn('mb-3 lg:mb-6', colorConfig.text)}>
+          <p className='text-sm font-semibold tracking-wider uppercase lg:text-xl'>
             Контейнер: {item.binLabel}
           </p>
-          <h1 className='mt-2 text-6xl font-black tracking-tight uppercase'>
+          <h1 className='mt-1 text-3xl font-black tracking-tight uppercase lg:mt-2 lg:text-6xl'>
             {item.binColor === 'yellow'
               ? 'ЖЕЛТЫЙ'
               : item.binColor === 'blue'
@@ -78,43 +78,43 @@ export function InstructionView({ item }: InstructionViewProps) {
           </h1>
         </div>
 
-        <div className='mb-6'>
-          <p className='text-3xl font-bold text-gray-900'>{item.label}</p>
+        <div className='mb-3 lg:mb-6'>
+          <p className='text-xl font-bold text-gray-900 lg:text-3xl'>{item.label}</p>
         </div>
 
-        <div className='mx-auto max-w-2xl rounded-2xl bg-white/80 p-6 shadow-lg'>
-          <Trash2 className='mx-auto mb-3 size-14 text-gray-700' />
-          <p className='text-xl leading-relaxed font-semibold text-gray-800'>
+        <div className='mx-auto max-w-2xl rounded-xl bg-white/80 p-4 shadow-lg lg:rounded-2xl lg:p-6'>
+          <Trash2 className='mx-auto mb-2 size-8 text-gray-700 lg:mb-3 lg:size-14' />
+          <p className='text-base leading-relaxed font-semibold text-gray-800 lg:text-xl'>
             {item.instruction}
           </p>
         </div>
       </div>
 
-      <div className='flex flex-wrap justify-center gap-4'>
+      <div className='flex flex-col justify-center gap-2 sm:flex-row sm:flex-wrap sm:gap-4'>
         <Button
           variant='outline'
           size='lg'
           onClick={reset}
-          className='h-14 gap-3 text-lg font-semibold'
+          className='h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg'
         >
-          <ArrowLeft className='size-5' />
+          <ArrowLeft className='size-4 lg:size-5' />
           Назад
         </Button>
         <Button
           variant='outline'
           size='lg'
           onClick={() => setIsDialogOpen(true)}
-          className='h-14 gap-3 text-lg font-semibold'
+          className='h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg'
         >
-          <Edit3 className='size-5' />
+          <Edit3 className='size-4 lg:size-5' />
           Не то, что я отсканировал?
         </Button>
         <Button
           size='lg'
           onClick={completeDisposal}
-          className={cn('h-14 gap-3 text-lg font-semibold', colorConfig.button)}
+          className={cn('h-10 gap-2 text-sm font-semibold lg:h-14 lg:gap-3 lg:text-lg', colorConfig.button)}
         >
-          <Trash2 className='size-5' />
+          <Trash2 className='size-4 lg:size-5' />
           Выбросил(а)
         </Button>
       </div>
@@ -122,8 +122,8 @@ export function InstructionView({ item }: InstructionViewProps) {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className='max-h-[80vh] max-w-4xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle className='text-2xl'>Выберите предмет вручную</DialogTitle>
-            <DialogDescription className='text-base'>
+            <DialogTitle className='text-xl lg:text-2xl'>Выберите предмет вручную</DialogTitle>
+            <DialogDescription className='text-sm lg:text-base'>
               Нажмите на нужный предмет для правильной сортировки отходов
             </DialogDescription>
           </DialogHeader>

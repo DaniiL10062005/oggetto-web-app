@@ -11,17 +11,17 @@ export default function KioskPage() {
   const { currentStep, selectedItem } = useKioskStore()
 
   return (
-    <div className='flex h-screen w-full flex-col overflow-hidden'>
+    <div className='flex min-h-screen w-full flex-col overflow-y-auto lg:h-screen lg:overflow-hidden'>
       <TotalScore />
 
-      <div className='flex flex-1 flex-col items-center justify-center overflow-hidden px-8 py-6'>
+      <div className='flex flex-1 flex-col items-center justify-center overflow-y-auto px-4 py-4 lg:overflow-hidden lg:px-8 lg:py-6'>
         {(currentStep === 'idle' || currentStep === 'scanning') && (
-          <div className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8'>
+          <div className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-4 lg:gap-8'>
             <div className='text-center'>
-              <h1 className='text-6xl font-bold tracking-tight text-gray-900'>
+              <h1 className='text-3xl font-bold tracking-tight text-gray-900 lg:text-6xl'>
                 Что вы хотите выбросить?
               </h1>
-              <p className='mt-4 text-2xl text-gray-600'>
+              <p className='mt-2 text-base text-gray-600 lg:mt-4 lg:text-2xl'>
                 Поднесите предмет к камере для сканирования
               </p>
             </div>

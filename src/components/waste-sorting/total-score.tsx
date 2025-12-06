@@ -36,13 +36,13 @@ export function TotalScore() {
   return (
     <motion.div
       ref={scope}
-      className='fixed top-6 right-6 z-50 flex items-center gap-3 rounded-full border-4 border-yellow-500 bg-yellow-50 px-6 py-3 shadow-xl'
+      className='fixed top-3 right-3 z-50 flex items-center gap-2 rounded-full border-2 border-yellow-500 bg-yellow-50 px-3 py-2 shadow-xl lg:top-6 lg:right-6 lg:gap-3 lg:border-4 lg:px-6 lg:py-3'
     >
       <motion.div animate={{ rotate: points > 0 ? 360 : 0 }} transition={{ duration: 0.5 }}>
-        <Coins className='size-8 text-yellow-600' />
+        <Coins className='size-5 text-yellow-600 lg:size-8' />
       </motion.div>
       <div className='text-right'>
-        <p className='text-xs font-semibold tracking-wider text-yellow-700 uppercase'>
+        <p className='text-[10px] font-semibold tracking-wider text-yellow-700 uppercase lg:text-xs'>
           Оджеттоны
         </p>
         <motion.p
@@ -50,7 +50,7 @@ export function TotalScore() {
           initial={{ scale: 1.5, color: '#16a34a' }}
           animate={{ scale: 1, color: '#78350f' }}
           transition={{ duration: 0.3 }}
-          className='text-2xl font-black text-yellow-900'
+          className='text-lg font-black text-yellow-900 lg:text-2xl'
         >
           {points}
         </motion.p>
